@@ -741,6 +741,20 @@
       .check.done {
         background: var(--green);
       }
+      .task-actions {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .task-update {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 6px 10px;
+        background: var(--card);
+        color: var(--ink);
+        font-weight: 700;
+        font-size: 11px;
+      }
       .task-main {
         flex: 1;
       }
@@ -1208,192 +1222,690 @@
     <script>
       (function (root, factory) {
   const api = factory();
-  if (typeof module === 'object' && module.exports) module.exports = api;
+  if (typeof module === "object" && module.exports) module.exports = api;
   if (root) root.GensCore = api;
-})(typeof window !== 'undefined' ? window : globalThis, function () {
+})(typeof window !== "undefined" ? window : globalThis, function () {
   const seedProjects = [
     {
-      id: 'p3', name: 'גינת משפחת לוי', location: 'עומר', stage: 'ביצוע', progress: 78,
-      contract: 96210, originalContract: 106900, cost: 57600, paid: 60000, labor: 19800,
-      status: 'attention', lastUpdate: '16/11', crewDays: 33, updates: 9,
-      tags: ['גינה פרטית', 'השקיה', 'מסלעה'],
+      id: "p3",
+      name: "גינת משפחת לוי",
+      location: "עומר",
+      stage: "ביצוע",
+      progress: 78,
+      contract: 96210,
+      originalContract: 106900,
+      cost: 57600,
+      paid: 60000,
+      labor: 19800,
+      status: "attention",
+      lastUpdate: "16/11",
+      crewDays: 33,
+      updates: 9,
+      tags: ["גינה פרטית", "השקיה", "מסלעה"],
       alerts: [
-        { id: 'a31', severity: 'high', title: 'עלות מאוחרת לא נכללה בסיכום', detail: 'בלה חצץ 400 ₪ ועבודת 16/11 נוספו לאחר חתך 13/11.', target: 'costs' },
-        { id: 'a32', severity: 'medium', title: 'תוספת ללא מחיר ודאי', detail: 'תוחם ברזל סומן 2,000 ₪ בסימן שאלה.', target: 'execution' },
-        { id: 'a33', severity: 'medium', title: 'בסיס חישוב שונה', detail: 'יתרת התשלום חושבה מההצעה המקורית, והרווחיות לאחר 10% הנחה.', target: 'costs' }
+        {
+          id: "a31",
+          severity: "high",
+          title: "עלות מאוחרת לא נכללה בסיכום",
+          detail: "בלה חצץ 400 ₪ ועבודת 16/11 נוספו לאחר חתך 13/11.",
+          target: "costs",
+        },
+        {
+          id: "a32",
+          severity: "medium",
+          title: "תוספת ללא מחיר ודאי",
+          detail: "תוחם ברזל סומן 2,000 ₪ בסימן שאלה.",
+          target: "execution",
+        },
+        {
+          id: "a33",
+          severity: "medium",
+          title: "בסיס חישוב שונה",
+          detail: "יתרת התשלום חושבה מההצעה המקורית, והרווחיות לאחר 10% הנחה.",
+          target: "costs",
+        },
       ],
       worklog: [
-        { date: '16/11', title: 'השלמת סלעים וחצץ', crew: 'שחף, כפרי · 2 עובדים', source: 'הקלטה', cost: 0 },
-        { date: '12/11', title: 'שתילות חזית, טפטוף ו־10 אבני מדרך', crew: 'שחף, כפרי · 2 עובדים', source: 'הקלטה', cost: 600 },
-        { date: '11/11', title: 'שתילות ופינישים כלליים', crew: 'שחף, כפרי, דור · חצי יום', source: 'פתק מיובא', cost: 0 },
-        { date: '23/10', title: 'אדנית סוקולנטים, חצץ, דשא ושתילה', crew: 'שחף, כפרי, סהר + 2', source: 'פתק מיובא', cost: 12600 },
-        { date: '22/10', title: 'פלריג, חצץ, אדנית ברזל ומדרגות', crew: 'צוות + קבלנים', source: 'פתק מיובא', cost: 4400 }
+        {
+          date: "16/11",
+          title: "השלמת סלעים וחצץ",
+          crew: "שחף, כפרי · 2 עובדים",
+          source: "הקלטה",
+          cost: 0,
+        },
+        {
+          date: "12/11",
+          title: "שתילות חזית, טפטוף ו־10 אבני מדרך",
+          crew: "שחף, כפרי · 2 עובדים",
+          source: "הקלטה",
+          cost: 600,
+        },
+        {
+          date: "11/11",
+          title: "שתילות ופינישים כלליים",
+          crew: "שחף, כפרי, דור · חצי יום",
+          source: "פתק מיובא",
+          cost: 0,
+        },
+        {
+          date: "23/10",
+          title: "אדנית סוקולנטים, חצץ, דשא ושתילה",
+          crew: "שחף, כפרי, סהר + 2",
+          source: "פתק מיובא",
+          cost: 12600,
+        },
+        {
+          date: "22/10",
+          title: "פלריג, חצץ, אדנית ברזל ומדרגות",
+          crew: "צוות + קבלנים",
+          source: "פתק מיובא",
+          cost: 4400,
+        },
       ],
       costs: [
-        { name: 'עבודה', category: 'עבודה', amount: 19800, status: 'בפועל', date: '13/11' },
-        { name: 'צמחייה ועצים', category: 'צמחייה', amount: 4600, status: 'בפועל', date: '23/10' },
-        { name: 'בזלת וחצץ', category: 'חיפויים', amount: 6400, status: 'בפועל', date: '16/11' },
-        { name: 'ראש מערכת והשקיה', category: 'השקיה', amount: 5500, status: 'בפועל', date: '13/11' },
-        { name: 'ברזל ועץ', category: 'בנייה', amount: 7000, status: 'בפועל', date: '23/10' },
-        { name: 'דשא, הובלה וחומרים נוספים', category: 'כללי', amount: 14300, status: 'בפועל', date: '13/11' }
+        {
+          name: "עבודה",
+          category: "עבודה",
+          amount: 19800,
+          status: "בפועל",
+          date: "13/11",
+        },
+        {
+          name: "צמחייה ועצים",
+          category: "צמחייה",
+          amount: 4600,
+          status: "בפועל",
+          date: "23/10",
+        },
+        {
+          name: "בזלת וחצץ",
+          category: "חיפויים",
+          amount: 6400,
+          status: "בפועל",
+          date: "16/11",
+        },
+        {
+          name: "ראש מערכת והשקיה",
+          category: "השקיה",
+          amount: 5500,
+          status: "בפועל",
+          date: "13/11",
+        },
+        {
+          name: "ברזל ועץ",
+          category: "בנייה",
+          amount: 7000,
+          status: "בפועל",
+          date: "23/10",
+        },
+        {
+          name: "דשא, הובלה וחומרים נוספים",
+          category: "כללי",
+          amount: 14300,
+          status: "בפועל",
+          date: "13/11",
+        },
       ],
       tasks: [
-        { title: 'לתמחר אבני לקט', type: 'חוסר מחיר', priority: 'high', done: false },
-        { title: 'לאשר תוספת תוחם ברזל', type: 'תוספת', priority: 'medium', done: false },
-        { title: 'להשלים תיעוד תשלום', type: 'תשלום', priority: 'medium', done: false },
-        { title: 'הזמנת עץ מחוטא 20/20', type: 'הזמנה', priority: 'low', done: true }
+        {
+          title: "לתמחר אבני לקט",
+          type: "חוסר מחיר",
+          priority: "high",
+          done: false,
+        },
+        {
+          title: "לאשר תוספת תוחם ברזל",
+          type: "תוספת",
+          priority: "medium",
+          done: false,
+        },
+        {
+          title: "להשלים תיעוד תשלום",
+          type: "תשלום",
+          priority: "medium",
+          done: false,
+        },
+        {
+          title: "הזמנת עץ מחוטא 20/20",
+          type: "הזמנה",
+          priority: "low",
+          done: true,
+        },
       ],
       files: [
-        { name: 'הצעת מחיר מעודכנת.pdf', type: 'מסמך', date: '02/09' },
-        { name: 'תכנית השקיה.pdf', type: 'תכנית', date: '28/08' },
-        { name: 'תמונות שטח · 18', type: 'תמונות', date: '16/11' },
-        { name: 'הקלטות מקור · 9', type: 'מקור', date: '16/11' }
+        { name: "הצעת מחיר מעודכנת.pdf", type: "מסמך", date: "02/09" },
+        { name: "תכנית השקיה.pdf", type: "תכנית", date: "28/08" },
+        { name: "תמונות שטח · 18", type: "תמונות", date: "16/11" },
+        { name: "הקלטות מקור · 9", type: "מקור", date: "16/11" },
       ],
-      weekly: 'השבוע הושלמו שתילות החזית והטפטוף. נוספה עבודת השלמת סלעים לאחר נפילת קרקע. נדרש לתמחר אבני לקט ולאשר את תוספת תוחם הברזל.'
+      weekly:
+        "השבוע הושלמו שתילות החזית והטפטוף. נוספה עבודת השלמת סלעים לאחר נפילת קרקע. נדרש לתמחר אבני לקט ולאשר את תוספת תוחם הברזל.",
     },
     {
-      id: 'p2', name: 'גינת משפחת כהן', location: 'באר שבע', stage: 'פינישים', progress: 88,
-      contract: 82000, originalContract: 82000, cost: 54033, paid: 50000, labor: 17733,
-      status: 'attention', lastUpdate: '30/10', crewDays: 28, updates: 12,
-      tags: ['אלמנט מים', 'גדר', 'נחל יבש'],
+      id: "p2",
+      name: "גינת משפחת כהן",
+      location: "באר שבע",
+      stage: "פינישים",
+      progress: 88,
+      contract: 82000,
+      originalContract: 82000,
+      cost: 54033,
+      paid: 50000,
+      labor: 17733,
+      status: "attention",
+      lastUpdate: "30/10",
+      crewDays: 28,
+      updates: 12,
+      tags: ["אלמנט מים", "גדר", "נחל יבש"],
       alerts: [
-        { id: 'a21', severity: 'high', title: '2 תוספות טרם תומחרו', detail: 'הזנת חשמל לאלמנט מים ופינוי פסולת בניין.', target: 'execution' },
-        { id: 'a22', severity: 'low', title: 'פער חישוב של 9 ₪', detail: '28 × 633 שווה 17,724 ₪, לא 17,733 ₪.', target: 'costs' }
+        {
+          id: "a21",
+          severity: "high",
+          title: "2 תוספות טרם תומחרו",
+          detail: "הזנת חשמל לאלמנט מים ופינוי פסולת בניין.",
+          target: "execution",
+        },
+        {
+          id: "a22",
+          severity: "low",
+          title: "פער חישוב של 9 ₪",
+          detail: "28 × 633 שווה 17,724 ₪, לא 17,733 ₪.",
+          target: "costs",
+        },
       ],
       worklog: [
-        { date: '30/10', title: 'גדר, שתילות ופינישים בהשקיה', crew: 'שחף, כפרי · 2 עובדים', source: 'פתק מיובא', cost: 0 },
-        { date: '29/10', title: 'המשך גדר ושתילות נמוכות', crew: 'שחף, כפרי · 2 עובדים', source: 'פתק מיובא', cost: 0 },
-        { date: '29/09', title: 'ריתוך גדר, מטפסים ותיקון פיצוץ מים', crew: 'שחף, כפרי, דור · 3 עובדים', source: 'פתק מיובא', cost: 0 },
-        { date: '22/09', title: 'ריצוף, שתילה, ניקיון ואלמנט מים', crew: 'שחף, ניר, דור · 3 עובדים', source: 'פתק מיובא', cost: 0 }
+        {
+          date: "30/10",
+          title: "גדר, שתילות ופינישים בהשקיה",
+          crew: "שחף, כפרי · 2 עובדים",
+          source: "פתק מיובא",
+          cost: 0,
+        },
+        {
+          date: "29/10",
+          title: "המשך גדר ושתילות נמוכות",
+          crew: "שחף, כפרי · 2 עובדים",
+          source: "פתק מיובא",
+          cost: 0,
+        },
+        {
+          date: "29/09",
+          title: "ריתוך גדר, מטפסים ותיקון פיצוץ מים",
+          crew: "שחף, כפרי, דור · 3 עובדים",
+          source: "פתק מיובא",
+          cost: 0,
+        },
+        {
+          date: "22/09",
+          title: "ריצוף, שתילה, ניקיון ואלמנט מים",
+          crew: "שחף, ניר, דור · 3 עובדים",
+          source: "פתק מיובא",
+          cost: 0,
+        },
       ],
       costs: [
-        { name: 'עבודה עד 29/9', category: 'עבודה', amount: 17733, status: 'בפועל', date: '29/09' },
-        { name: 'עצים וצמחייה שלב א׳', category: 'צמחייה', amount: 12500, status: 'בפועל', date: '22/09' },
-        { name: 'צמחייה נוספת', category: 'צמחייה', amount: 8000, status: 'אחרי חתך', date: '30/10' },
-        { name: 'חמרה, חצץ וקומפוסט', category: 'קרקע', amount: 3500, status: 'בפועל', date: '22/09' },
-        { name: 'ברזל וחומרי בניין', category: 'בנייה', amount: 5100, status: 'בפועל', date: '29/09' },
-        { name: 'השקיה, חשמל ואבני מדרך', category: 'תשתיות', amount: 7200, status: 'בפועל', date: '29/09' }
+        {
+          name: "עבודה עד 29/9",
+          category: "עבודה",
+          amount: 17733,
+          status: "בפועל",
+          date: "29/09",
+        },
+        {
+          name: "עצים וצמחייה שלב א׳",
+          category: "צמחייה",
+          amount: 12500,
+          status: "בפועל",
+          date: "22/09",
+        },
+        {
+          name: "צמחייה נוספת",
+          category: "צמחייה",
+          amount: 8000,
+          status: "אחרי חתך",
+          date: "30/10",
+        },
+        {
+          name: "חמרה, חצץ וקומפוסט",
+          category: "קרקע",
+          amount: 3500,
+          status: "בפועל",
+          date: "22/09",
+        },
+        {
+          name: "ברזל וחומרי בניין",
+          category: "בנייה",
+          amount: 5100,
+          status: "בפועל",
+          date: "29/09",
+        },
+        {
+          name: "השקיה, חשמל ואבני מדרך",
+          category: "תשתיות",
+          amount: 7200,
+          status: "בפועל",
+          date: "29/09",
+        },
       ],
       tasks: [
-        { title: 'לתמחר הזנת חשמל', type: 'תוספת', priority: 'high', done: false },
-        { title: 'לתמחר פינוי פסולת', type: 'תוספת', priority: 'high', done: false },
-        { title: 'צילום גינה', type: 'משימה', priority: 'low', done: false }
+        {
+          title: "לתמחר הזנת חשמל",
+          type: "תוספת",
+          priority: "high",
+          done: false,
+        },
+        {
+          title: "לתמחר פינוי פסולת",
+          type: "תוספת",
+          priority: "high",
+          done: false,
+        },
+        { title: "צילום גינה", type: "משימה", priority: "low", done: false },
       ],
-      files: [{ name: 'תמונות אלמנט מים · 8', type: 'תמונות', date: '22/09' }, { name: 'פתק מקור Google Keep', type: 'מקור', date: '30/10' }],
-      weekly: 'הפרויקט בשלב פינישים. שתי תוספות שבוצעו עדיין אינן מתומחרות. עלות הצמחייה המאוחרת אינה כלולה בחתך 29/9.'
+      files: [
+        { name: "תמונות אלמנט מים · 8", type: "תמונות", date: "22/09" },
+        { name: "פתק מקור Google Keep", type: "מקור", date: "30/10" },
+      ],
+      weekly:
+        "הפרויקט בשלב פינישים. שתי תוספות שבוצעו עדיין אינן מתומחרות. עלות הצמחייה המאוחרת אינה כלולה בחתך 29/9.",
     },
     {
-      id: 'p1', name: 'גינת גג משפחת ישראלי', location: 'להבים', stage: 'ביצוע', progress: 64,
-      contract: 76000, originalContract: 76000, cost: 43866, paid: 35000, labor: 7200,
-      status: 'stable', lastUpdate: '23/07', crewDays: 12, updates: 5,
-      tags: ['פרגולה', 'גינת גג', 'תאורה'],
-      alerts: [{ id: 'a11', severity: 'medium', title: 'פער של 200 ₪ בסיכום החומרים', detail: 'סכום השורות הוא 36,666 ₪ לעומת 36,866 ₪ שנרשם.', target: 'costs' }],
+      id: "p1",
+      name: "גינת גג משפחת ישראלי",
+      location: "להבים",
+      stage: "ביצוע",
+      progress: 64,
+      contract: 76000,
+      originalContract: 76000,
+      cost: 43866,
+      paid: 35000,
+      labor: 7200,
+      status: "stable",
+      lastUpdate: "23/07",
+      crewDays: 12,
+      updates: 5,
+      tags: ["פרגולה", "גינת גג", "תאורה"],
+      alerts: [
+        {
+          id: "a11",
+          severity: "medium",
+          title: "פער של 200 ₪ בסיכום החומרים",
+          detail: "סכום השורות הוא 36,666 ₪ לעומת 36,866 ₪ שנרשם.",
+          target: "costs",
+        },
+      ],
       worklog: [
-        { date: '23/07', title: 'שתילות, דשא סינטטי, תאורה וחלוקי נחל', crew: '2 עובדים', source: 'פתק מיובא', cost: 0 },
-        { date: '20/07', title: 'צמחייה, עקירה, חיפוי והשקיה', crew: '4 עובדים', source: 'פתק מיובא', cost: 0 },
-        { date: '19/07', title: 'גדר, עצים והכנת קרקע', crew: 'סאם, שחף, אשכול', source: 'פתק מיובא', cost: 0 },
-        { date: '06/07', title: 'פרגולה, עקירת צמחייה וסידור שיש', crew: 'צוות רון + צוות מארק', source: 'פתק מיובא', cost: 0 }
+        {
+          date: "23/07",
+          title: "שתילות, דשא סינטטי, תאורה וחלוקי נחל",
+          crew: "2 עובדים",
+          source: "פתק מיובא",
+          cost: 0,
+        },
+        {
+          date: "20/07",
+          title: "צמחייה, עקירה, חיפוי והשקיה",
+          crew: "4 עובדים",
+          source: "פתק מיובא",
+          cost: 0,
+        },
+        {
+          date: "19/07",
+          title: "גדר, עצים והכנת קרקע",
+          crew: "סאם, שחף, אשכול",
+          source: "פתק מיובא",
+          cost: 0,
+        },
+        {
+          date: "06/07",
+          title: "פרגולה, עקירת צמחייה וסידור שיש",
+          crew: "צוות רון + צוות מארק",
+          source: "פתק מיובא",
+          cost: 0,
+        },
       ],
       costs: [
-        { name: 'עבודה', category: 'עבודה', amount: 7200, status: 'בפועל', date: '23/07' },
-        { name: 'פרגולה', category: 'בנייה', amount: 13891, status: 'בפועל', date: '23/07' },
-        { name: 'צמחייה ועצים', category: 'צמחייה', amount: 13105, status: 'בפועל', date: '23/07' },
-        { name: 'חיפויים ודשא', category: 'חיפויים', amount: 6920, status: 'בפועל', date: '23/07' },
-        { name: 'תאורה וגדר', category: 'תשתיות', amount: 1750, status: 'בפועל', date: '23/07' },
-        { name: 'הובלה וחומרים', category: 'כללי', amount: 1000, status: 'בפועל', date: '23/07' }
+        {
+          name: "עבודה",
+          category: "עבודה",
+          amount: 7200,
+          status: "בפועל",
+          date: "23/07",
+        },
+        {
+          name: "פרגולה",
+          category: "בנייה",
+          amount: 13891,
+          status: "בפועל",
+          date: "23/07",
+        },
+        {
+          name: "צמחייה ועצים",
+          category: "צמחייה",
+          amount: 13105,
+          status: "בפועל",
+          date: "23/07",
+        },
+        {
+          name: "חיפויים ודשא",
+          category: "חיפויים",
+          amount: 6920,
+          status: "בפועל",
+          date: "23/07",
+        },
+        {
+          name: "תאורה וגדר",
+          category: "תשתיות",
+          amount: 1750,
+          status: "בפועל",
+          date: "23/07",
+        },
+        {
+          name: "הובלה וחומרים",
+          category: "כללי",
+          amount: 1000,
+          status: "בפועל",
+          date: "23/07",
+        },
       ],
       tasks: [
-        { title: 'להזמין 30 מחברי 16', type: 'חוסר', priority: 'high', done: false },
-        { title: 'ארגז השקיה וצינורית', type: 'חוסר', priority: 'medium', done: false },
-        { title: 'לאשר זן ליגוסטרמיה', type: 'החלטה', priority: 'low', done: false }
+        {
+          title: "להזמין 30 מחברי 16",
+          type: "חוסר",
+          priority: "high",
+          done: false,
+        },
+        {
+          title: "ארגז השקיה וצינורית",
+          type: "חוסר",
+          priority: "medium",
+          done: false,
+        },
+        {
+          title: "לאשר זן ליגוסטרמיה",
+          type: "החלטה",
+          priority: "low",
+          done: false,
+        },
       ],
-      files: [{ name: 'רשימת צמחייה.xlsx', type: 'רשימה', date: '18/07' }, { name: 'תמונות גג · 12', type: 'תמונות', date: '23/07' }, { name: 'פתק מקור Google Keep', type: 'מקור', date: '23/07' }],
-      weekly: 'הפרגולה והחיפויים התקדמו. נותרו חוסרים בהשקיה ואישור זן אחד. נמצא פער של 200 ₪ בסיכום החומרים.'
-    }
+      files: [
+        { name: "רשימת צמחייה.xlsx", type: "רשימה", date: "18/07" },
+        { name: "תמונות גג · 12", type: "תמונות", date: "23/07" },
+        { name: "פתק מקור Google Keep", type: "מקור", date: "23/07" },
+      ],
+      weekly:
+        "הפרגולה והחיפויים התקדמו. נותרו חוסרים בהשקיה ואישור זן אחד. נמצא פער של 200 ₪ בסיכום החומרים.",
+    },
   ];
 
-  function clone(value) { return JSON.parse(JSON.stringify(value)); }
-  function createState() { return { projects: clone(seedProjects), currentProjectId: 'p3', activeView: 'home', activeProjectTab: 'overview', theme: 'light', activity: [] }; }
-  function getProject(state, id) { return state.projects.find(p => p.id === (id || state.currentProjectId)); }
-  function money(n) { return new Intl.NumberFormat('he-IL', { style: 'currency', currency: 'ILS', maximumFractionDigits: 0 }).format(Number(n) || 0); }
-  function margin(project) { return project.contract ? Math.round(((project.contract - project.cost) / project.contract) * 100) : 0; }
-  function balance(project) { return Math.max(0, project.contract - project.paid); }
+  function clone(value) {
+    return JSON.parse(JSON.stringify(value));
+  }
+  function createState() {
+    return {
+      projects: clone(seedProjects),
+      currentProjectId: "p3",
+      activeView: "home",
+      activeProjectTab: "overview",
+      theme: "light",
+      activity: [],
+    };
+  }
+  function getProject(state, id) {
+    return state.projects.find((p) => p.id === (id || state.currentProjectId));
+  }
+  function money(n) {
+    return new Intl.NumberFormat("he-IL", {
+      style: "currency",
+      currency: "ILS",
+      maximumFractionDigits: 0,
+    }).format(Number(n) || 0);
+  }
+  function margin(project) {
+    return project.contract
+      ? Math.round(((project.contract - project.cost) / project.contract) * 100)
+      : 0;
+  }
+  function balance(project) {
+    return Math.max(0, project.contract - project.paid);
+  }
   function totals(state) {
     const contract = state.projects.reduce((s, p) => s + p.contract, 0);
     const cost = state.projects.reduce((s, p) => s + p.cost, 0);
     const paid = state.projects.reduce((s, p) => s + p.paid, 0);
     const alerts = state.projects.reduce((s, p) => s + p.alerts.length, 0);
-    return { contract, cost, paid, profit: contract - cost, alerts, openTasks: state.projects.reduce((s, p) => s + p.tasks.filter(t => !t.done).length, 0) };
+    return {
+      contract,
+      cost,
+      paid,
+      profit: contract - cost,
+      alerts,
+      openTasks: state.projects.reduce(
+        (s, p) => s + p.tasks.filter((t) => !t.done).length,
+        0,
+      ),
+    };
   }
-  function allAlerts(state) { return state.projects.flatMap(p => p.alerts.map(a => ({ ...a, projectId: p.id, projectName: p.name }))); }
+  function allAlerts(state) {
+    return state.projects.flatMap((p) =>
+      p.alerts.map((a) => ({ ...a, projectId: p.id, projectName: p.name })),
+    );
+  }
   function identifyProject(state, text) {
-    const q = String(text || '').toLowerCase().replace(/[–—-]/g, ' ');
-    const direct = state.projects.find(p => {
-      const parts = p.name.toLowerCase().replace('גינת ', '').split(/\s+/).filter(x => x.length > 2);
-      return q.includes(p.name.toLowerCase()) || q.includes(p.location.toLowerCase()) || parts.some(x => q.includes(x));
+    const q = String(text || "")
+      .toLowerCase()
+      .replace(/[–—-]/g, " ");
+    const direct = state.projects.find((p) => {
+      const parts = p.name
+        .toLowerCase()
+        .replace("גינת ", "")
+        .split(/\s+/)
+        .filter((x) => x.length > 2);
+      return (
+        q.includes(p.name.toLowerCase()) ||
+        q.includes(p.location.toLowerCase()) ||
+        parts.some((x) => q.includes(x))
+      );
     });
     return direct ? direct.id : null;
   }
   function parseUpdate(text) {
-    const raw = String(text || '').trim();
+    const raw = String(text || "").trim();
     const lower = raw.toLowerCase();
     const nums = raw.match(/\d[\d,]*/g) || [];
     const hasAmbiguity = /לא ברור|אולי|\?|או\s+\d/.test(raw);
-    const costMatch = raw.match(/(?:קנינו|עלות|עלה|הוצאה|ב־|ב)\s*(\d[\d,]*)\s*(?:שח|₪)?/);
-    const crew = ['שחף', 'כפרי', 'דור', 'סהר', 'רון', 'חנן', 'ניר', 'עפרי'].filter(n => raw.includes(n));
-    const shortages = /חסר|חסרים|להזמין/.test(lower) ? [raw.split(/[,.]/).find(x => /חסר|להזמין/.test(x))?.trim() || 'חוסר שזוהה'] : [];
+    const costMatch = raw.match(
+      /(?:קנינו|עלות|עלה|הוצאה|ב־|ב)\s*(\d[\d,]*)\s*(?:שח|₪)?/,
+    );
+    const crew = [
+      "שחף",
+      "כפרי",
+      "דור",
+      "סהר",
+      "רון",
+      "חנן",
+      "ניר",
+      "עפרי",
+    ].filter((n) => raw.includes(n));
+    const shortages = /חסר|חסרים|להזמין/.test(lower)
+      ? [
+          raw
+            .split(/[,.]/)
+            .find((x) => /חסר|להזמין/.test(x))
+            ?.trim() || "חוסר שזוהה",
+        ]
+      : [];
     const extras = /תוספת|לא בהצעה/.test(lower) ? [raw] : [];
-    const activities = raw.split(/[,.]/).map(x => x.trim()).filter(x => x.length > 2 && !/חסר|קנינו|עלות|הוצאה/.test(x)).slice(0, 3);
-    return { raw, crew, numbers: nums, cost: costMatch ? Number(costMatch[1].replace(/,/g, '')) : 0, shortages, extras, activities, ambiguous: hasAmbiguity };
+    const activities = raw
+      .split(/[,.]/)
+      .map((x) => x.trim())
+      .filter((x) => x.length > 2 && !/חסר|קנינו|עלות|הוצאה/.test(x))
+      .slice(0, 3);
+    return {
+      raw,
+      crew,
+      numbers: nums,
+      cost: costMatch ? Number(costMatch[1].replace(/,/g, "")) : 0,
+      shortages,
+      extras,
+      activities,
+      ambiguous: hasAmbiguity,
+    };
   }
-  function applyUpdate(state, projectId, text, source = 'הקלטה חדשה') {
+  function applyUpdate(state, projectId, text, source = "הקלטה חדשה") {
     const project = getProject(state, projectId);
-    if (!project) return { ok: false, error: 'project_not_found' };
+    if (!project) return { ok: false, error: "project_not_found" };
     const parsed = parseUpdate(text);
-    if (!parsed.raw) return { ok: false, error: 'empty_update' };
-    if (parsed.ambiguous) return { ok: false, needsClarification: true, parsed, question: 'זיהיתי סכום או ניסוח לא ודאי. איזה סכום נכון לעדכון?' };
-    const title = parsed.activities.join(', ') || 'עדכון מהשטח';
-    project.worklog.unshift({ date: 'היום', title, crew: parsed.crew.length ? parsed.crew.join(', ') : 'לא צוין', source, cost: parsed.cost });
+    if (!parsed.raw) return { ok: false, error: "empty_update" };
+    if (parsed.ambiguous)
+      return {
+        ok: false,
+        needsClarification: true,
+        parsed,
+        question: "זיהיתי סכום או ניסוח לא ודאי. איזה סכום נכון לעדכון?",
+      };
+    const title = parsed.activities.join(", ") || "עדכון מהשטח";
+    project.worklog.unshift({
+      date: "היום",
+      title,
+      crew: parsed.crew.length ? parsed.crew.join(", ") : "לא צוין",
+      source,
+      cost: parsed.cost,
+    });
     project.updates += 1;
-    project.lastUpdate = 'היום';
+    project.lastUpdate = "היום";
     if (parsed.cost) {
       project.cost += parsed.cost;
-      project.costs.unshift({ name: title.slice(0, 34), category: 'עדכון מהשטח', amount: parsed.cost, status: 'דווח', date: 'היום' });
+      project.costs.unshift({
+        name: title.slice(0, 34),
+        category: "עדכון מהשטח",
+        amount: parsed.cost,
+        status: "דווח",
+        date: "היום",
+      });
     }
-    parsed.shortages.forEach((s, i) => project.tasks.unshift({ title: s.replace(/^.*?(חסר(?:ים)?|להזמין)\s*/,'').trim() || 'חוסר חדש', type: 'חוסר', priority: i ? 'medium' : 'high', done: false }));
+    parsed.shortages.forEach((s, i) =>
+      project.tasks.unshift({
+        title: s.replace(/^.*?(חסר(?:ים)?|להזמין)\s*/, "").trim() || "חוסר חדש",
+        type: "חוסר",
+        priority: i ? "medium" : "high",
+        done: false,
+      }),
+    );
     project.progress = Math.min(99, project.progress + 1);
-    state.activity.unshift({ projectId: project.id, text: parsed.raw, at: new Date().toISOString() });
+    state.activity.unshift({
+      projectId: project.id,
+      text: parsed.raw,
+      at: new Date().toISOString(),
+    });
     return { ok: true, parsed, project };
   }
+  function updateTask(state, projectId, taskIndex, patch = {}) {
+    const project = getProject(state, projectId);
+    const task = project && project.tasks[Number(taskIndex)];
+    if (!project || !task) return { ok: false, error: "task_not_found" };
+    const previousAmount = Number(task.amount) || 0;
+    const previousType = task.financialType || "";
+    const amount = Math.max(0, Number(patch.amount) || 0);
+    const financialType = patch.financialType || "";
+    if (previousAmount && previousType === "cost")
+      project.cost -= previousAmount;
+    if (previousAmount && previousType === "revenue")
+      project.contract -= previousAmount;
+    if (amount && financialType === "cost") project.cost += amount;
+    if (amount && financialType === "revenue") project.contract += amount;
+    task.amount = amount;
+    task.financialType = financialType;
+    task.status = patch.status || task.status || "פתוח";
+    task.note = String(patch.note || task.note || "").trim();
+    task.done = task.status === "הושלם";
+    project.lastUpdate = "היום";
+    project.worklog.unshift({
+      date: "היום",
+      title: `עדכון ביצוע: ${task.title}`,
+      crew: task.note || "עדכון ידני",
+      source: patch.source || "מערכת · עדכון ביצוע",
+      cost: financialType === "cost" ? amount : 0,
+    });
+    if (amount && financialType === "cost") {
+      project.costs.unshift({
+        name: task.title,
+        category: "עדכון ביצוע",
+        amount,
+        status: task.status,
+        date: "היום",
+      });
+    }
+    state.activity.unshift({
+      projectId: project.id,
+      text: `עדכון ביצוע: ${task.title}`,
+      at: new Date().toISOString(),
+    });
+    return { ok: true, project, task };
+  }
   function resolveAlert(state, projectId, alertId) {
-    const p = getProject(state, projectId); if (!p) return false;
-    const before = p.alerts.length; p.alerts = p.alerts.filter(a => a.id !== alertId); return p.alerts.length < before;
+    const p = getProject(state, projectId);
+    if (!p) return false;
+    const before = p.alerts.length;
+    p.alerts = p.alerts.filter((a) => a.id !== alertId);
+    return p.alerts.length < before;
   }
   function answerAgent(state, question) {
-    const q = String(question || '').trim().toLowerCase();
+    const q = String(question || "")
+      .trim()
+      .toLowerCase();
     const p = getProject(state);
     const t = totals(state);
-    if (!q) return 'אפשר לשאול על עלויות, יתרות, חריגות, חוסרים, עובדים או מצב פרויקט.';
+    if (!q)
+      return "אפשר לשאול על עלויות, יתרות, חריגות, חוסרים, עובדים או מצב פרויקט.";
     if (/מה.*דורש|חריג|התראה|לטפל/.test(q)) {
       const alerts = allAlerts(state).slice(0, 4);
-      return alerts.length ? `יש ${t.alerts} חריגות פעילות. המרכזיות: ${alerts.map(a => `${a.projectName} — ${a.title}`).join('; ')}.` : 'לא נמצאו חריגות פעילות בנתוני הדמו.';
+      return alerts.length
+        ? `יש ${t.alerts} חריגות פעילות. המרכזיות: ${alerts.map((a) => `${a.projectName} — ${a.title}`).join("; ")}.`
+        : "לא נמצאו חריגות פעילות בנתוני הדמו.";
     }
     if (/רווח|רווחיות|מרווח/.test(q)) {
-      if (/כל|עסק|חברה/.test(q)) return `הרווח התפעולי החזוי בכל הפרויקטים הוא ${money(t.profit)} מתוך היקף הצעות של ${money(t.contract)}.`;
+      if (/כל|עסק|חברה/.test(q))
+        return `הרווח התפעולי החזוי בכל הפרויקטים הוא ${money(t.profit)} מתוך היקף הצעות של ${money(t.contract)}.`;
       return `ב${p.name} העלות המצטברת היא ${money(p.cost)} מול הצעה של ${money(p.contract)}. הרווח התפעולי החזוי הוא ${money(p.contract - p.cost)} (${margin(p)}%).`;
     }
-    if (/יתרה|לגבייה|שולם|תשלום/.test(q)) return `ב${p.name} התקבלו ${money(p.paid)} ונשארו ${money(balance(p))} לפי בסיס ההצעה הנוכחי. קיימת התראה אם בסיס החישוב אינו עקבי.`;
+    if (/יתרה|לגבייה|שולם|תשלום/.test(q))
+      return `ב${p.name} התקבלו ${money(p.paid)} ונשארו ${money(balance(p))} לפי בסיס ההצעה הנוכחי. קיימת התראה אם בסיס החישוב אינו עקבי.`;
     if (/חסר|הזמנ|משימ/.test(q)) {
-      const open = p.tasks.filter(x => !x.done);
-      return open.length ? `ב${p.name} יש ${open.length} פריטים פתוחים: ${open.map(x => x.title).join(', ')}.` : `לא נמצאו חוסרים או משימות פתוחות ב${p.name}.`;
+      const open = p.tasks.filter((x) => !x.done);
+      return open.length
+        ? `ב${p.name} יש ${open.length} פריטים פתוחים: ${open.map((x) => x.title).join(", ")}.`
+        : `לא נמצאו חוסרים או משימות פתוחות ב${p.name}.`;
     }
-    if (/עובד|יומיות|צוות/.test(q)) return `ב${p.name} תועדו ${p.crewDays} יומיות/ימי צוות ועלות עבודה של ${money(p.labor)}.`;
-    const mentioned = state.projects.find(x => q.includes(x.name.replace('גינת ', '').toLowerCase()) || q.includes(x.location.toLowerCase()));
-    if (mentioned) return `${mentioned.name} נמצא בשלב ${mentioned.stage}, ${mentioned.progress}% התקדמות, עלות ${money(mentioned.cost)}, ו־${mentioned.alerts.length} חריגות פעילות.`;
-    if (/פרויקט|מצב/.test(q)) return `${p.name} נמצא בשלב ${p.stage} וב־${p.progress}% התקדמות. העדכון האחרון: ${p.lastUpdate}.`;
-    return 'לא מצאתי תשובה מבוססת בנתוני הדמו. אפשר לשאול למשל: “מה דורש טיפול?”, “מה הרווחיות?”, “מה חסר בפרויקט?” או “כמה נשאר לגבייה?”.';
+    if (/עובד|יומיות|צוות/.test(q))
+      return `ב${p.name} תועדו ${p.crewDays} יומיות/ימי צוות ועלות עבודה של ${money(p.labor)}.`;
+    const mentioned = state.projects.find(
+      (x) =>
+        q.includes(x.name.replace("גינת ", "").toLowerCase()) ||
+        q.includes(x.location.toLowerCase()),
+    );
+    if (mentioned)
+      return `${mentioned.name} נמצא בשלב ${mentioned.stage}, ${mentioned.progress}% התקדמות, עלות ${money(mentioned.cost)}, ו־${mentioned.alerts.length} חריגות פעילות.`;
+    if (/פרויקט|מצב/.test(q))
+      return `${p.name} נמצא בשלב ${p.stage} וב־${p.progress}% התקדמות. העדכון האחרון: ${p.lastUpdate}.`;
+    return "לא מצאתי תשובה מבוססת בנתוני הדמו. אפשר לשאול למשל: “מה דורש טיפול?”, “מה הרווחיות?”, “מה חסר בפרויקט?” או “כמה נשאר לגבייה?”.";
   }
-  return { seedProjects, createState, getProject, money, margin, balance, totals, allAlerts, identifyProject, parseUpdate, applyUpdate, resolveAlert, answerAgent };
+  return {
+    seedProjects,
+    createState,
+    getProject,
+    money,
+    margin,
+    balance,
+    totals,
+    allAlerts,
+    identifyProject,
+    parseUpdate,
+    applyUpdate,
+    updateTask,
+    resolveAlert,
+    answerAgent,
+  };
 });
 
     </script>
@@ -1476,11 +1988,14 @@
             )}</div></div><div class="card"><div class="section-title"><h2>סיכום שבועי</h2><span class="badge">אוטומטי</span></div><p>${esc(p.weekly)}</p></div></div><div><div class="card"><div class="section-title"><h2>חריגות ותובנות</h2><span class="badge danger">${p.alerts.length}</span></div><div class="alert-list">${p.alerts.length ? p.alerts.map((a) => alertCard({ ...a, projectId: p.id, projectName: p.name })).join("") : '<div class="empty">אין חריגות פעילות.</div>'}</div></div><div class="card"><div class="section-title"><h2>השלבים הבאים</h2></div>${p.tasks
             .filter((t) => !t.done)
             .slice(0, 4)
-            .map(taskRow)
+            .map((t) => taskRow(t, p.tasks.indexOf(t)))
             .join("")}</div></div></div>`;
         }
         function taskRow(t, i) {
-          return `<div class="task"><button class="check ${t.done ? "done" : ""}" data-task="${i}" aria-label="סימון משימה">${t.done ? "✓" : ""}</button><div class="task-main"><strong>${esc(t.title)}</strong><span class="tiny muted">${esc(t.type)}</span></div><span class="badge ${t.priority === "high" ? "danger" : t.priority === "medium" ? "warn" : ""}">${t.priority === "high" ? "דחוף" : t.priority === "medium" ? "בינוני" : "רגיל"}</span></div>`;
+          const meta = [t.type, t.status, t.amount ? C.money(t.amount) : ""]
+            .filter(Boolean)
+            .join(" · ");
+          return `<div class="task"><button class="check ${t.done ? "done" : ""}" data-task="${i}" aria-label="סימון משימה">${t.done ? "✓" : ""}</button><div class="task-main"><strong>${esc(t.title)}</strong><span class="tiny muted">${esc(meta)}</span>${t.note ? `<span class="tiny muted">${esc(t.note)}</span>` : ""}</div><div class="task-actions"><button class="task-update" data-task-update="${i}">עדכון</button><span class="badge ${t.priority === "high" ? "danger" : t.priority === "medium" ? "warn" : ""}">${t.priority === "high" ? "דחוף" : t.priority === "medium" ? "בינוני" : "רגיל"}</span></div></div>`;
         }
         function projectWorklog(p) {
           return `<div class="card"><div class="section-title"><h2>יומן עבודה</h2><button class="primary" id="logUpdate">＋ עדכון</button></div><div class="timeline">${p.worklog.map((e) => `<div class="event"><strong>${esc(e.date)}</strong><span class="event-dot"></span><div><h3>${esc(e.title)}</h3><p>${esc(e.crew)} · מקור: ${esc(e.source)} ${e.cost ? `· <span class="event-cost">${C.money(e.cost)}</span>` : ""}</p></div></div>`).join("")}</div></div>`;
@@ -1489,7 +2004,7 @@
           return `<div class="metrics"><div class="metric m1"><div class="label">הצעה נטו</div><div class="value">${C.money(p.contract)}</div><div class="sub">הצעה מקורית ${C.money(p.originalContract)}</div></div><div class="metric m2"><div class="label">עלות בפועל</div><div class="value">${C.money(p.cost)}</div><div class="sub">נכון לעדכון האחרון</div></div><div class="metric m4"><div class="label">רווח חזוי</div><div class="value">${C.money(p.contract - p.cost)}</div><div class="sub">${C.margin(p)}% מההצעה</div></div><div class="metric m3"><div class="label">יתרה לגבייה</div><div class="value">${C.money(C.balance(p))}</div><div class="sub">נגבה ${C.money(p.paid)}</div></div></div><div class="card"><div class="section-title"><h2>פירוט עלויות</h2><span class="badge">תפעולי · לא הנהלת חשבונות</span></div><div class="tablewrap"><table><thead><tr><th>פריט</th><th>קטגוריה</th><th>סכום</th><th>סטטוס</th><th>תאריך</th></tr></thead><tbody>${p.costs.map((c) => `<tr><td><strong>${esc(c.name)}</strong></td><td>${esc(c.category)}</td><td>${C.money(c.amount)}</td><td><span class="badge ${c.status === "אחרי חתך" ? "warn" : "ok"}">${esc(c.status)}</span></td><td>${esc(c.date)}</td></tr>`).join("")}</tbody><tfoot><tr><td colspan="2">סה״כ מערכת</td><td>${C.money(p.cost)}</td><td colspan="2">רווח חזוי ${C.money(p.contract - p.cost)}</td></tr></tfoot></table></div></div>`;
         }
         function projectExecution(p) {
-          return `<div class="grid2"><div class="card"><div class="section-title"><h2>משימות, חוסרים והזמנות</h2><span class="badge">${p.tasks.filter((t) => !t.done).length} פתוחים</span></div>${p.tasks.map(taskRow).join("")}</div><div class="card"><div class="section-title"><h2>תוספות ושינויים</h2></div>${
+          return `<div class="grid2"><div class="card"><div class="section-title"><div><h2>משימות, חוסרים והזמנות</h2><span class="tiny muted">אפשר להקליט תשובה, להוסיף מחיר ולעדכן סטטוס</span></div><span class="badge">${p.tasks.filter((t) => !t.done).length} פתוחים</span></div>${p.tasks.map((t, i) => taskRow(t, i)).join("")}</div><div class="card"><div class="section-title"><h2>תוספות ושינויים</h2></div>${
             p.alerts
               .filter((a) => /תוספת|מחיר/.test(a.title + a.detail))
               .map((a) =>
@@ -1552,24 +2067,45 @@
         }
         function telegramModal(projectId) {
           const selected = projectId ? C.getProject(state, projectId) : null;
-          modal(`<div class="modalhead"><div><h2>סוכן GENS ב־Telegram</h2><p class="muted">סימולציה: ממשק העבודה היומי של מארק</p></div><button class="close">×</button></div><div class="tgphone"><div class="tghead"><div class="tgavatar">G</div><div><strong>GENS Agent</strong><div class="tiny muted">מחובר למערכת הפרויקטים</div></div></div><div class="tgchat" id="tgChat"><div class="tgmsg bot">שלח שם פרויקט ואת כל מה שקרה — בהודעה, בהקלטה, בתמונה או במסמך. אשאל רק אם משהו לא ברור.<span class="tgtime">עכשיו</span></div>${selected ? `<div class="tgmsg bot">ההקשר הנוכחי: <strong>${esc(selected.name)}</strong>.<span class="tgtime">עכשיו</span></div>` : ""}</div><div class="tgactions"><button class="tgaction" id="tgVoice">▶ הקלטה לדוגמה</button><button class="tgaction" id="tgAmbiguous">? אי־בהירות</button><button class="tgaction" id="tgAsk">⌕ תשאול נתונים</button></div></div><p class="tiny muted" style="margin-top:10px">הדמו מדמה את החיבור. במוצר אמיתי Telegram Bot יעביר את ההודעות לשרת מאובטח ולעדכון מסד הנתונים.</p>`);
+          modal(
+            `<div class="modalhead"><div><h2>סוכן GENS ב־Telegram</h2><p class="muted">סימולציה: ממשק העבודה היומי של מארק</p></div><button class="close">×</button></div><div class="tgphone"><div class="tghead"><div class="tgavatar">G</div><div><strong>GENS Agent</strong><div class="tiny muted">מחובר למערכת הפרויקטים</div></div></div><div class="tgchat" id="tgChat"><div class="tgmsg bot">שלח שם פרויקט ואת כל מה שקרה — בהודעה, בהקלטה, בתמונה או במסמך. אשאל רק אם משהו לא ברור.<span class="tgtime">עכשיו</span></div>${selected ? `<div class="tgmsg bot">ההקשר הנוכחי: <strong>${esc(selected.name)}</strong>.<span class="tgtime">עכשיו</span></div>` : ""}</div><div class="tgactions"><button class="tgaction" id="tgVoice">▶ הקלטה לדוגמה</button><button class="tgaction" id="tgAmbiguous">? אי־בהירות</button><button class="tgaction" id="tgAsk">⌕ תשאול נתונים</button></div></div><p class="tiny muted" style="margin-top:10px">הדמו מדמה את החיבור. במוצר אמיתי Telegram Bot יעביר את ההודעות לשרת מאובטח ולעדכון מסד הנתונים.</p>`,
+          );
           const chat = $("#tgChat");
           const add = (kind, html) => {
-            chat.insertAdjacentHTML("beforeend", `<div class="tgmsg ${kind}">${html}<span class="tgtime">עכשיו</span></div>`);
+            chat.insertAdjacentHTML(
+              "beforeend",
+              `<div class="tgmsg ${kind}">${html}<span class="tgtime">עכשיו</span></div>`,
+            );
             chat.scrollTop = chat.scrollHeight;
           };
-          const resolveProject = (text) => selected?.id || C.identifyProject(state, text);
+          const resolveProject = (text) =>
+            selected?.id || C.identifyProject(state, text);
           $("#tgVoice").onclick = () => {
             const text = selected
               ? "היום שחף וכפרי השלימו טפטוף ושתלו עצים. קנינו קומפוסט ב־800 שקל וחסרים שני מחברי 16."
               : "פרויקט לוי — היום שחף וכפרי השלימו טפטוף ושתלו עצים. קנינו קומפוסט ב־800 שקל וחסרים שני מחברי 16.";
             add("user", `🎤 ${esc(text)}`);
             const id = resolveProject(text);
-            const res = C.applyUpdate(state, id, text, "Telegram · הודעה קולית");
+            const res = C.applyUpdate(
+              state,
+              id,
+              text,
+              "Telegram · הודעה קולית",
+            );
             if (res.ok) {
-              add("bot", `זיהיתי את <strong>${esc(res.project.name)}</strong>. היומן, העלויות והחוסרים עודכנו אוטומטית. אין צורך באישור נוסף. <button class="secondary tiny" id="tgOpen">פתיחה בפרויקט</button>`);
-              $("#tgOpen").onclick = () => { closeModal(); openProject(id, "overview"); };
-            } else add("bot", "לא הצלחתי לזהות את הפרויקט. אפשר לבחור אותו מהרשימה?");
+              add(
+                "bot",
+                `זיהיתי את <strong>${esc(res.project.name)}</strong>. היומן, העלויות והחוסרים עודכנו אוטומטית. אין צורך באישור נוסף. <button class="secondary tiny" id="tgOpen">פתיחה בפרויקט</button>`,
+              );
+              $("#tgOpen").onclick = () => {
+                closeModal();
+                openProject(id, "overview");
+              };
+            } else
+              add(
+                "bot",
+                "לא הצלחתי לזהות את הפרויקט. אפשר לבחור אותו מהרשימה?",
+              );
           };
           $("#tgAmbiguous").onclick = () => {
             const text = selected
@@ -1577,19 +2113,69 @@
               : "פרויקט לוי — קנינו חומר השקיה ב־800 או 1,800 שקל?";
             add("user", esc(text));
             const id = resolveProject(text);
-            add("bot", `יתר העדכון ברור. רק כדי שלא אשמור סכום שגוי: <strong>800 או 1,800 ₪?</strong><div class="tgactions"><button class="tgaction tgResolve" data-v="800">800 ₪</button><button class="tgaction tgResolve" data-v="1800">1,800 ₪</button></div>`);
-            $$(".tgResolve", chat).forEach((b) => (b.onclick = () => {
-              const fixed = text.replace(/800 או 1,800/, b.dataset.v).replace("?", "");
-              C.applyUpdate(state, id, fixed, "Telegram · הבהרה");
-              add("user", `${b.dataset.v} ₪`); add("bot", "הובהר ונשמר. הדשבורד עודכן.");
-              $$(".tgResolve", chat).forEach((x) => (x.disabled = true));
-            }));
+            add(
+              "bot",
+              `יתר העדכון ברור. רק כדי שלא אשמור סכום שגוי: <strong>800 או 1,800 ₪?</strong><div class="tgactions"><button class="tgaction tgResolve" data-v="800">800 ₪</button><button class="tgaction tgResolve" data-v="1800">1,800 ₪</button></div>`,
+            );
+            $$(".tgResolve", chat).forEach(
+              (b) =>
+                (b.onclick = () => {
+                  const fixed = text
+                    .replace(/800 או 1,800/, b.dataset.v)
+                    .replace("?", "");
+                  C.applyUpdate(state, id, fixed, "Telegram · הבהרה");
+                  add("user", `${b.dataset.v} ₪`);
+                  add("bot", "הובהר ונשמר. הדשבורד עודכן.");
+                  $$(".tgResolve", chat).forEach((x) => (x.disabled = true));
+                }),
+            );
           };
           $("#tgAsk").onclick = () => {
             state.currentProjectId = selected?.id || state.currentProjectId;
             add("user", "מה דורש טיפול בפרויקט?");
             add("bot", esc(C.answerAgent(state, "מה דורש טיפול?")));
           };
+        }
+        function taskUpdateModal(taskIndex) {
+          const p = C.getProject(state);
+          const task = p.tasks[Number(taskIndex)];
+          if (!task) return;
+          modal(
+            `<div class="modalhead"><div><h2>עדכון פריט ביצוע</h2><p class="muted">${esc(p.name)} · ${esc(task.title)}</p></div><button class="close">×</button></div><div class="recordbox"><button class="record" id="taskRecord">●</button><p><strong>הקלטת תשובה או סגירה</strong></p><span class="tiny muted">לדוגמה: הלקוח אישר 2,000 ₪, בוצע היום</span></div><div class="field"><label>תשובה / הערה</label><textarea id="taskNote" placeholder="מה נסגר, מי אישר ומה צריך לקרות עכשיו">${esc(task.note || "")}</textarea></div><div class="field"><label>סכום</label><input id="taskAmount" type="number" min="0" value="${task.amount || ""}" placeholder="₪"></div><div class="field"><label>משמעות הסכום</label><select id="taskFinancialType"><option value="">ללא השפעה כספית</option><option value="revenue" ${task.financialType === "revenue" ? "selected" : ""}>מחיר תוספת ללקוח</option><option value="cost" ${task.financialType === "cost" ? "selected" : ""}>עלות לפרויקט</option></select></div><div class="field"><label>סטטוס</label><select id="taskStatus">${["פתוח", "ממתין לאישור", "אושר", "הוזמן", "בוצע", "הושלם"].map((s) => `<option ${task.status === s ? "selected" : ""}>${s}</option>`).join("")}</select></div><div class="modal-actions"><button class="primary" id="saveTaskUpdate">שמירה ועדכון</button><button class="secondary" id="saveTaskDone">שמירה וסימון כהושלם</button></div>`,
+          );
+          $("#taskRecord").onclick = () => {
+            $("#taskRecord").classList.add("recording");
+            $("#taskRecord").textContent = "■";
+            setTimeout(() => {
+              $("#taskRecord").classList.remove("recording");
+              $("#taskRecord").textContent = "✓";
+              $("#taskNote").value =
+                "הלקוח אישר בהקלטה. המחיר שסוכם הוא 2,000 ₪ והעבודה תבוצע מחר.";
+              $("#taskAmount").value = "2000";
+              $("#taskFinancialType").value = "revenue";
+              $("#taskStatus").value = "אושר";
+            }, 850);
+          };
+          const save = (done) => {
+            const result = C.updateTask(state, p.id, taskIndex, {
+              note: $("#taskNote").value,
+              amount: $("#taskAmount").value,
+              financialType: $("#taskFinancialType").value,
+              status: done ? "הושלם" : $("#taskStatus").value,
+              source: "מערכת · תשובת ביצוע",
+            });
+            if (!result.ok) return toast("לא ניתן היה לשמור את העדכון");
+            closeModal();
+            state.activeProjectTab = "execution";
+            render();
+            toast(
+              done
+                ? "המידע נשמר והפריט הושלם"
+                : "המידע והסכום נשמרו והמדדים עודכנו",
+            );
+          };
+          $("#saveTaskUpdate").onclick = () => save(false);
+          $("#saveTaskDone").onclick = () => save(true);
         }
         function updateModal(projectId) {
           const p = projectId ? C.getProject(state, projectId) : null;
@@ -1726,11 +2312,18 @@
           });
           const ae = $("#addExtra");
           if (ae) ae.onclick = () => updateModal(state.currentProjectId);
+          $$("[data-task-update]").forEach(
+            (b) => (b.onclick = () => taskUpdateModal(b.dataset.taskUpdate)),
+          );
           $$(".check").forEach(
-            (b, i) =>
+            (b) =>
               (b.onclick = () => {
                 const p = C.getProject(state);
-                if (p.tasks[i]) p.tasks[i].done = !p.tasks[i].done;
+                const i = Number(b.dataset.task);
+                if (p.tasks[i]) {
+                  p.tasks[i].done = !p.tasks[i].done;
+                  p.tasks[i].status = p.tasks[i].done ? "הושלם" : "פתוח";
+                }
                 render();
                 toast("המשימה עודכנה");
               }),
@@ -1780,6 +2373,7 @@
           setView,
           openProject,
           updateModal,
+          taskUpdateModal,
           telegramModal,
           sendQuestion,
         };
