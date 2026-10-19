@@ -1,47 +1,1212 @@
 <!doctype html>
 <html lang="he" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#f4f0ed">
-  <title>GENS Flow — ניהול פרויקטים חכם</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap');
-    :root{--bg:#f4f0ed;--ink:#172018;--mute:#6c756d;--card:rgba(255,255,255,.78);--line:rgba(32,48,34,.11);--sand:#c5a48e;--leaf:#60765b;--sage:#8da487;--mint:#bfd4c0;--olive:#3f5942;--amber:#c98d35;--rose:#bd5d52;--green:#3c8b63;--shadow:0 14px 38px rgba(42,55,43,.08);--grad:linear-gradient(120deg,#354d3a,#6f8b67 54%,#b8a184);--agent:linear-gradient(160deg,#0e1711,#16271a 55%,#233326)}
-    body.dark{--bg:#0c130e;--ink:#edf4ee;--mute:#9aaa9c;--card:rgba(26,38,28,.78);--line:rgba(255,255,255,.09);--shadow:0 16px 40px rgba(0,0,0,.24)}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,Arial,sans-serif;font-size:14px;min-height:100vh;transition:.25s;background-image:radial-gradient(circle at 85% 8%,rgba(191,212,192,.5),transparent 25%),radial-gradient(circle at 8% 35%,rgba(197,164,142,.22),transparent 27%)}
-    button,input,textarea,select{font:inherit}button{cursor:pointer}.app{min-height:100vh}.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:16px;padding:12px 22px;background:rgba(244,240,237,.82);backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}body.dark .topbar{background:rgba(12,19,14,.84)}
-    .brand{display:flex;align-items:center;gap:10px;min-width:205px}.brandmark{width:48px;height:43px;position:relative}.brandmark:before,.brandmark:after{content:"";position:absolute;inset:auto 2px;border-radius:50%;border-top:5px solid var(--ink);transform:skewX(-15deg)}.brandmark:before{top:9px;height:13px}.brandmark:after{top:23px;height:10px}.brand strong{font-size:24px;letter-spacing:2px;line-height:1}.brand small{display:block;color:var(--mute);font-size:11px;letter-spacing:0}
-    .mainnav{display:flex;gap:6px;background:rgba(255,255,255,.46);padding:5px;border:1px solid var(--line);border-radius:999px}.navbtn{border:0;background:transparent;color:var(--mute);padding:8px 16px;border-radius:999px;font-weight:700}.navbtn.active{background:var(--ink);color:var(--bg);box-shadow:0 6px 18px rgba(20,33,22,.15)}.top-actions{margin-right:auto;display:flex;gap:8px;align-items:center}.iconbtn,.secondary,.primary{border-radius:999px;padding:9px 14px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-weight:700}.primary{background:var(--grad);color:white;border:0;box-shadow:0 10px 24px rgba(63,89,66,.2)}.iconbtn{width:40px;height:40px;padding:0;font-size:17px}.primary:hover,.secondary:hover,.iconbtn:hover{transform:translateY(-1px)}
-    .shell{max-width:1540px;margin:0 auto;padding:22px;display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:20px}.content{min-width:0}.pagehead{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin:4px 0 18px}.pagehead h1{font-size:26px;line-height:1.1;margin:0 0 5px;font-weight:800}.pagehead p{margin:0;color:var(--mute)}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:21px;padding:18px;box-shadow:var(--shadow);backdrop-filter:blur(16px);margin-bottom:16px}.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-bottom:16px}.metric{min-height:106px;border-radius:18px;padding:15px 16px;color:#fff;position:relative;overflow:hidden;box-shadow:0 10px 24px rgba(34,55,37,.1)}.metric:after{content:"↗";position:absolute;left:14px;top:14px;width:29px;height:29px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.18);font-size:14px}.metric .label{opacity:.82;font-size:12px;font-weight:600}.metric .value{font-size:26px;font-weight:800;margin-top:8px;line-height:1}.metric .sub{font-size:11px;opacity:.8;margin-top:8px}.m1{background:linear-gradient(135deg,#324c39,#6f8d69)}.m2{background:linear-gradient(135deg,#6f594a,#c5a48e)}.m3{background:linear-gradient(135deg,#776025,#c9963e)}.m4{background:linear-gradient(135deg,#315f50,#5b9d7e)}
-    .grid2{display:grid;grid-template-columns:1.12fr .88fr;gap:16px}.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}.section-title h2{font-size:17px;margin:0}.muted{color:var(--mute)}.tiny{font-size:11px}.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:999px;background:rgba(96,118,91,.11);color:var(--olive);font-size:11px;font-weight:700}body.dark .badge{color:#cae0ca}.badge.warn{background:rgba(201,141,53,.14);color:#996316}.badge.danger{background:rgba(189,93,82,.13);color:#9d453d}.badge.ok{background:rgba(60,139,99,.13);color:#2f7654}
-    .project-list{display:grid;gap:10px}.project-row{display:grid;grid-template-columns:1.2fr .75fr .7fr auto;gap:12px;align-items:center;padding:13px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.38);transition:.2s}.project-row:hover{border-color:rgba(96,118,91,.35);transform:translateY(-1px)}.project-name{font-weight:800}.progress{height:7px;background:rgba(96,118,91,.11);border-radius:999px;overflow:hidden;margin-top:6px}.progress i{display:block;height:100%;background:var(--grad);border-radius:inherit}.money{font-weight:800;white-space:nowrap}.row-action{border:0;background:rgba(96,118,91,.1);width:34px;height:34px;border-radius:50%;color:var(--ink)}
-    .alert-list{display:grid;gap:9px}.alert{display:flex;gap:11px;padding:12px;border-radius:15px;border:1px solid var(--line);background:rgba(255,255,255,.35);cursor:pointer}.alert:hover{background:rgba(255,255,255,.65)}.alert-dot{width:9px;height:9px;border-radius:50%;margin-top:6px;flex:0 0 auto}.alert-dot.high{background:var(--rose);box-shadow:0 0 0 5px rgba(189,93,82,.12)}.alert-dot.medium{background:var(--amber);box-shadow:0 0 0 5px rgba(201,141,53,.12)}.alert-dot.low{background:var(--sage);box-shadow:0 0 0 5px rgba(141,164,135,.12)}.alert strong{display:block;font-size:13px}.alert p{margin:2px 0 0;color:var(--mute);font-size:12px}.alert .linkish{font-size:11px;color:var(--leaf);font-weight:700;margin-top:5px}
-    .agent{position:sticky;top:88px;height:calc(100vh - 110px);min-height:590px;border-radius:25px;padding:1px;background:linear-gradient(120deg,rgba(143,169,136,.7),rgba(197,164,142,.45),rgba(73,107,77,.75));box-shadow:0 24px 60px rgba(17,34,21,.2)}.agent-inner{height:100%;border-radius:24px;background:var(--agent);color:#eef5ef;padding:18px;display:flex;flex-direction:column;overflow:hidden;position:relative}.agent-glow{position:absolute;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,rgba(151,194,143,.34),transparent 68%);top:-70px;left:-50px;animation:breathe 3s ease-in-out infinite}.agent-head{position:relative;display:flex;gap:11px;align-items:center}.orb{width:42px;height:42px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#dcebd6,#75956e 38%,#263b2b 70%);box-shadow:0 0 28px rgba(139,183,132,.55)}.agent-head h2{font-size:17px;margin:0}.agent-head p{font-size:11px;margin:2px 0 0;color:#a9b7ac}.agent-status{margin-right:auto;width:8px;height:8px;border-radius:50%;background:#80c997;box-shadow:0 0 12px #80c997}.suggestions{display:flex;flex-wrap:wrap;gap:6px;margin:15px 0 12px}.suggestion{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.07);color:#dfe9e0;border-radius:999px;padding:6px 9px;font-size:11px}.chat{flex:1;overflow:auto;display:flex;flex-direction:column;gap:9px;padding:3px 2px}.bubble{max-width:92%;padding:10px 12px;border-radius:15px;line-height:1.55;font-size:12.5px}.bubble.bot{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.07);align-self:flex-start}.bubble.user{background:linear-gradient(120deg,#678161,#9a836f);align-self:flex-end;color:white}.chat-form{display:flex;gap:7px;margin-top:11px}.chat-form input{min-width:0;flex:1;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08);color:white;border-radius:13px;padding:10px 11px;outline:0}.chat-form input::placeholder{color:#95a59a}.chat-form button{width:40px;border:0;border-radius:12px;background:#d7e4d6;color:#203123;font-weight:900}
-    .project-hero{padding:20px;background:linear-gradient(120deg,rgba(255,255,255,.88),rgba(224,233,221,.72));border:1px solid var(--line);border-radius:22px;margin-bottom:14px;box-shadow:var(--shadow)}body.dark .project-hero{background:linear-gradient(120deg,rgba(31,48,34,.88),rgba(52,64,49,.72))}.breadcrumbs{color:var(--mute);font-size:12px;margin-bottom:11px}.hero-grid{display:flex;align-items:center;gap:18px}.hero-main{flex:1}.hero-main h1{font-size:25px;margin:0 0 6px}.hero-actions{display:flex;gap:7px;flex-wrap:wrap}.project-tabs{display:flex;gap:5px;overflow:auto;padding:5px;background:rgba(255,255,255,.4);border:1px solid var(--line);border-radius:15px;margin-bottom:15px}.ptab{border:0;background:transparent;color:var(--mute);white-space:nowrap;padding:8px 13px;border-radius:11px;font-weight:700}.ptab.active{background:var(--card);color:var(--ink);box-shadow:0 5px 15px rgba(30,50,35,.08)}
-    .kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}.soft-kpi{padding:14px;border-radius:16px;background:rgba(255,255,255,.48);border:1px solid var(--line)}.soft-kpi span{display:block;color:var(--mute);font-size:11px}.soft-kpi strong{display:block;font-size:20px;margin-top:3px}.timeline{display:grid;gap:0}.event{display:grid;grid-template-columns:58px 14px 1fr;gap:9px;position:relative;padding-bottom:17px}.event:before{content:"";position:absolute;right:64px;top:14px;bottom:0;width:1px;background:var(--line)}.event:last-child:before{display:none}.event-dot{width:11px;height:11px;border-radius:50%;background:var(--leaf);margin-top:5px;box-shadow:0 0 0 5px rgba(96,118,91,.12);z-index:1}.event h3{font-size:13px;margin:0 0 3px}.event p{margin:0;color:var(--mute);font-size:12px}.event-cost{font-weight:700;color:var(--olive)}
-    table{width:100%;border-collapse:collapse;min-width:590px}.tablewrap{overflow:auto}th,td{text-align:right;padding:11px 9px;border-bottom:1px solid var(--line);font-size:12px}th{color:var(--mute);font-weight:600}tbody tr:hover{background:rgba(96,118,91,.05)}tfoot td{font-weight:800;font-size:13px}.task{display:flex;align-items:center;gap:10px;padding:11px;border-bottom:1px solid var(--line)}.task:last-child{border-bottom:0}.check{width:20px;height:20px;border:1px solid var(--line);border-radius:7px;display:grid;place-items:center;color:white;background:transparent}.check.done{background:var(--green)}.task-main{flex:1}.task-main strong{display:block;font-size:13px}.file-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.file{border:1px solid var(--line);border-radius:16px;padding:15px;background:rgba(255,255,255,.35)}.file-icon{font-size:24px;margin-bottom:8px}.file strong{display:block}.file span{font-size:11px;color:var(--mute)}
-    .insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.insight{min-height:170px}.bars{display:flex;align-items:flex-end;gap:11px;height:95px;margin-top:15px}.bar{flex:1;border-radius:8px 8px 2px 2px;background:var(--grad);position:relative;min-width:28px}.bar span{position:absolute;bottom:-20px;width:100%;text-align:center;color:var(--mute);font-size:10px}.ring{width:110px;height:110px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--leaf) var(--pct),rgba(96,118,91,.12) 0);margin:15px auto 0}.ring:before{content:"";width:78px;height:78px;border-radius:50%;background:var(--bg);position:absolute}.ring strong{z-index:1;font-size:21px}.flow{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:23px}.flow-node{padding:10px;border-radius:13px;background:rgba(96,118,91,.1);font-size:11px;font-weight:700;text-align:center}.flow-arrow{color:var(--sage);font-size:20px}
-    .modalback{position:fixed;inset:0;background:rgba(10,16,11,.58);z-index:50;display:grid;place-items:center;padding:16px}.modal{width:min(560px,96vw);max-height:92vh;overflow:auto;background:var(--bg);border:1px solid var(--line);border-radius:23px;padding:20px;box-shadow:0 30px 80px rgba(0,0,0,.28)}.modal h2{margin:0 0 5px}.modalhead{display:flex;justify-content:space-between;align-items:flex-start}.close{border:0;background:rgba(96,118,91,.1);width:34px;height:34px;border-radius:50%;color:var(--ink)}.field{margin-top:13px}.field label{display:block;font-weight:700;font-size:12px;margin-bottom:5px}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--card);color:var(--ink);outline:0}.field textarea{min-height:110px;resize:vertical}.recordbox{border:1px dashed rgba(96,118,91,.4);border-radius:18px;padding:20px;text-align:center;margin-top:14px;background:rgba(96,118,91,.05)}.record{width:68px;height:68px;border-radius:50%;border:0;background:var(--grad);color:white;font-size:26px;box-shadow:0 0 0 9px rgba(96,118,91,.1)}.record.recording{animation:pulse 1s infinite;background:linear-gradient(135deg,#bd5d52,#d18a69)}.modal-actions{display:flex;gap:8px;justify-content:flex-start;margin-top:16px}.dropzone{border:1px dashed rgba(96,118,91,.4);border-radius:16px;padding:20px;text-align:center;background:rgba(96,118,91,.05);margin-top:12px}.toast{position:fixed;z-index:80;bottom:24px;right:24px;background:#18251b;color:white;padding:12px 16px;border-radius:13px;box-shadow:0 15px 35px rgba(0,0,0,.22);animation:toastin .25s}.empty{padding:25px;text-align:center;color:var(--mute)}
-    @keyframes breathe{50%{transform:scale(1.12);opacity:.75}}@keyframes pulse{50%{box-shadow:0 0 0 15px rgba(189,93,82,.08)}}@keyframes toastin{from{transform:translateY(12px);opacity:0}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
-    @media(max-width:1050px){.shell{grid-template-columns:1fr}.agent{position:relative;top:0;height:650px}.grid2{grid-template-columns:1fr}.insight-grid{grid-template-columns:1fr 1fr}.topbar{flex-wrap:wrap}.top-actions{margin-right:0;margin-left:auto}}
-    @media(max-width:740px){.topbar{padding:10px 12px;gap:8px}.brand{min-width:auto}.brand small{display:none}.mainnav{order:3;width:100%;justify-content:space-around}.navbtn{padding:7px 12px}.shell{padding:12px}.pagehead{align-items:center}.pagehead h1{font-size:22px}.desktop-only{display:none}.metrics{grid-template-columns:1fr 1fr}.metric{min-height:94px}.project-row{grid-template-columns:1fr auto}.project-row>div:nth-child(2),.project-row>div:nth-child(3){display:none}.kpi-strip{grid-template-columns:1fr 1fr}.hero-grid{display:block}.hero-actions{margin-top:13px}.insight-grid{grid-template-columns:1fr}.agent{height:620px;min-height:0}.top-actions .secondary{display:none}}
-  </style>
-</head>
-<body>
-<div class="app">
-  <header class="topbar">
-    <div class="brand"><div class="brandmark" aria-hidden="true"></div><div><strong>GENS</strong><small>ניהול פרויקטים חכם</small></div></div>
-    <nav class="mainnav" aria-label="ניווט ראשי">
-      <button class="navbtn active" data-view="home">בית</button><button class="navbtn" data-view="projects">פרויקטים</button><button class="navbtn" data-view="insights">תובנות</button>
-    </nav>
-    <div class="top-actions"><button class="secondary" id="newProjectBtn">＋ פרויקט חדש</button><button class="primary" id="globalUpdateBtn">◉ עדכון חדש</button><button class="iconbtn" id="themeBtn" aria-label="החלפת מצב תצוגה">☾</button></div>
-  </header>
-  <main class="shell"><section class="content" id="content"></section><aside class="agent" aria-label="סוכן נתונים"><div class="agent-inner"><div class="agent-glow"></div><div class="agent-head"><div class="orb"></div><div><h2>GENS Agent</h2><p>סוכן הדגמה · עונה מנתוני המערכת בלבד</p></div><span class="agent-status"></span></div><div class="suggestions"><button class="suggestion">מה דורש טיפול?</button><button class="suggestion">מה הרווחיות?</button><button class="suggestion">כמה נשאר לגבייה?</button><button class="suggestion">מה חסר בפרויקט?</button></div><div class="chat" id="chat"><div class="bubble bot">אני מחובר לנתוני הדמו של הפרויקטים. אפשר לשאול אותי על מצב, עלויות, רווחיות, תשלומים, עובדים, חוסרים וחריגות.</div></div><form class="chat-form" id="chatForm"><input id="chatInput" placeholder="שאל על הנתונים..." autocomplete="off"><button aria-label="שליחה">←</button></form></div></aside></main>
-</div>
-<div id="overlay"></div><div id="toastRoot"></div>
-<script>(function (root, factory) {
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#f4f0ed" />
+    <title>GENS Flow — ניהול פרויקטים חכם</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap");
+      :root {
+        --bg: #f4f0ed;
+        --ink: #172018;
+        --mute: #6c756d;
+        --card: rgba(255, 255, 255, 0.78);
+        --line: rgba(32, 48, 34, 0.11);
+        --sand: #c5a48e;
+        --leaf: #60765b;
+        --sage: #8da487;
+        --mint: #bfd4c0;
+        --olive: #3f5942;
+        --amber: #c98d35;
+        --rose: #bd5d52;
+        --green: #3c8b63;
+        --shadow: 0 14px 38px rgba(42, 55, 43, 0.08);
+        --grad: linear-gradient(120deg, #354d3a, #6f8b67 54%, #b8a184);
+        --agent: linear-gradient(160deg, #0e1711, #16271a 55%, #233326);
+      }
+      body.dark {
+        --bg: #0c130e;
+        --ink: #edf4ee;
+        --mute: #9aaa9c;
+        --card: rgba(26, 38, 28, 0.78);
+        --line: rgba(255, 255, 255, 0.09);
+        --shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: Heebo, Arial, sans-serif;
+        font-size: 14px;
+        min-height: 100vh;
+        transition: 0.25s;
+        background-image:
+          radial-gradient(
+            circle at 85% 8%,
+            rgba(191, 212, 192, 0.5),
+            transparent 25%
+          ),
+          radial-gradient(
+            circle at 8% 35%,
+            rgba(197, 164, 142, 0.22),
+            transparent 27%
+          );
+      }
+      button,
+      input,
+      textarea,
+      select {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      .app {
+        min-height: 100vh;
+      }
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 30;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 12px 22px;
+        background: rgba(244, 240, 237, 0.82);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--line);
+      }
+      body.dark .topbar {
+        background: rgba(12, 19, 14, 0.84);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 205px;
+      }
+      .brandmark {
+        width: 48px;
+        height: 43px;
+        position: relative;
+      }
+      .brandmark:before,
+      .brandmark:after {
+        content: "";
+        position: absolute;
+        inset: auto 2px;
+        border-radius: 50%;
+        border-top: 5px solid var(--ink);
+        transform: skewX(-15deg);
+      }
+      .brandmark:before {
+        top: 9px;
+        height: 13px;
+      }
+      .brandmark:after {
+        top: 23px;
+        height: 10px;
+      }
+      .brand strong {
+        font-size: 24px;
+        letter-spacing: 2px;
+        line-height: 1;
+      }
+      .brand small {
+        display: block;
+        color: var(--mute);
+        font-size: 11px;
+        letter-spacing: 0;
+      }
+      .mainnav {
+        display: flex;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.46);
+        padding: 5px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+      }
+      .navbtn {
+        border: 0;
+        background: transparent;
+        color: var(--mute);
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-weight: 700;
+      }
+      .navbtn.active {
+        background: var(--ink);
+        color: var(--bg);
+        box-shadow: 0 6px 18px rgba(20, 33, 22, 0.15);
+      }
+      .top-actions {
+        margin-right: auto;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .iconbtn,
+      .secondary,
+      .primary {
+        border-radius: 999px;
+        padding: 9px 14px;
+        border: 1px solid var(--line);
+        background: var(--card);
+        color: var(--ink);
+        font-weight: 700;
+      }
+      .primary {
+        background: var(--grad);
+        color: white;
+        border: 0;
+        box-shadow: 0 10px 24px rgba(63, 89, 66, 0.2);
+      }
+      .iconbtn {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        font-size: 17px;
+      }
+      .primary:hover,
+      .secondary:hover,
+      .iconbtn:hover {
+        transform: translateY(-1px);
+      }
+      .shell {
+        max-width: 1540px;
+        margin: 0 auto;
+        padding: 22px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 360px;
+        gap: 20px;
+      }
+      .content {
+        min-width: 0;
+      }
+      .pagehead {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin: 4px 0 18px;
+      }
+      .pagehead h1 {
+        font-size: 26px;
+        line-height: 1.1;
+        margin: 0 0 5px;
+        font-weight: 800;
+      }
+      .pagehead p {
+        margin: 0;
+        color: var(--mute);
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 21px;
+        padding: 18px;
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(16px);
+        margin-bottom: 16px;
+      }
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      .metric {
+        min-height: 106px;
+        border-radius: 18px;
+        padding: 15px 16px;
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 24px rgba(34, 55, 37, 0.1);
+      }
+      .metric:after {
+        content: "↗";
+        position: absolute;
+        left: 14px;
+        top: 14px;
+        width: 29px;
+        height: 29px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: rgba(255, 255, 255, 0.18);
+        font-size: 14px;
+      }
+      .metric .label {
+        opacity: 0.82;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .metric .value {
+        font-size: 26px;
+        font-weight: 800;
+        margin-top: 8px;
+        line-height: 1;
+      }
+      .metric .sub {
+        font-size: 11px;
+        opacity: 0.8;
+        margin-top: 8px;
+      }
+      .m1 {
+        background: linear-gradient(135deg, #324c39, #6f8d69);
+      }
+      .m2 {
+        background: linear-gradient(135deg, #6f594a, #c5a48e);
+      }
+      .m3 {
+        background: linear-gradient(135deg, #776025, #c9963e);
+      }
+      .m4 {
+        background: linear-gradient(135deg, #315f50, #5b9d7e);
+      }
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1.12fr 0.88fr;
+        gap: 16px;
+      }
+      .section-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 13px;
+      }
+      .section-title h2 {
+        font-size: 17px;
+        margin: 0;
+      }
+      .muted {
+        color: var(--mute);
+      }
+      .tiny {
+        font-size: 11px;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 9px;
+        border-radius: 999px;
+        background: rgba(96, 118, 91, 0.11);
+        color: var(--olive);
+        font-size: 11px;
+        font-weight: 700;
+      }
+      body.dark .badge {
+        color: #cae0ca;
+      }
+      .badge.warn {
+        background: rgba(201, 141, 53, 0.14);
+        color: #996316;
+      }
+      .badge.danger {
+        background: rgba(189, 93, 82, 0.13);
+        color: #9d453d;
+      }
+      .badge.ok {
+        background: rgba(60, 139, 99, 0.13);
+        color: #2f7654;
+      }
+      .project-list {
+        display: grid;
+        gap: 10px;
+      }
+      .project-row {
+        display: grid;
+        grid-template-columns: 1.2fr 0.75fr 0.7fr auto;
+        gap: 12px;
+        align-items: center;
+        padding: 13px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.38);
+        transition: 0.2s;
+      }
+      .project-row:hover {
+        border-color: rgba(96, 118, 91, 0.35);
+        transform: translateY(-1px);
+      }
+      .project-name {
+        font-weight: 800;
+      }
+      .progress {
+        height: 7px;
+        background: rgba(96, 118, 91, 0.11);
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 6px;
+      }
+      .progress i {
+        display: block;
+        height: 100%;
+        background: var(--grad);
+        border-radius: inherit;
+      }
+      .money {
+        font-weight: 800;
+        white-space: nowrap;
+      }
+      .row-action {
+        border: 0;
+        background: rgba(96, 118, 91, 0.1);
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        color: var(--ink);
+      }
+      .alert-list {
+        display: grid;
+        gap: 9px;
+      }
+      .alert {
+        display: flex;
+        gap: 11px;
+        padding: 12px;
+        border-radius: 15px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.35);
+        cursor: pointer;
+      }
+      .alert:hover {
+        background: rgba(255, 255, 255, 0.65);
+      }
+      .alert-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        margin-top: 6px;
+        flex: 0 0 auto;
+      }
+      .alert-dot.high {
+        background: var(--rose);
+        box-shadow: 0 0 0 5px rgba(189, 93, 82, 0.12);
+      }
+      .alert-dot.medium {
+        background: var(--amber);
+        box-shadow: 0 0 0 5px rgba(201, 141, 53, 0.12);
+      }
+      .alert-dot.low {
+        background: var(--sage);
+        box-shadow: 0 0 0 5px rgba(141, 164, 135, 0.12);
+      }
+      .alert strong {
+        display: block;
+        font-size: 13px;
+      }
+      .alert p {
+        margin: 2px 0 0;
+        color: var(--mute);
+        font-size: 12px;
+      }
+      .alert .linkish {
+        font-size: 11px;
+        color: var(--leaf);
+        font-weight: 700;
+        margin-top: 5px;
+      }
+      .agent {
+        position: sticky;
+        top: 88px;
+        height: calc(100vh - 110px);
+        min-height: 590px;
+        border-radius: 25px;
+        padding: 1px;
+        background: linear-gradient(
+          120deg,
+          rgba(143, 169, 136, 0.7),
+          rgba(197, 164, 142, 0.45),
+          rgba(73, 107, 77, 0.75)
+        );
+        box-shadow: 0 24px 60px rgba(17, 34, 21, 0.2);
+      }
+      .agent-inner {
+        height: 100%;
+        border-radius: 24px;
+        background: var(--agent);
+        color: #eef5ef;
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: relative;
+      }
+      .agent-glow {
+        position: absolute;
+        width: 190px;
+        height: 190px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(151, 194, 143, 0.34),
+          transparent 68%
+        );
+        top: -70px;
+        left: -50px;
+        animation: breathe 3s ease-in-out infinite;
+      }
+      .agent-head {
+        position: relative;
+        display: flex;
+        gap: 11px;
+        align-items: center;
+      }
+      .orb {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle at 35% 30%,
+          #dcebd6,
+          #75956e 38%,
+          #263b2b 70%
+        );
+        box-shadow: 0 0 28px rgba(139, 183, 132, 0.55);
+      }
+      .agent-head h2 {
+        font-size: 17px;
+        margin: 0;
+      }
+      .agent-head p {
+        font-size: 11px;
+        margin: 2px 0 0;
+        color: #a9b7ac;
+      }
+      .agent-status {
+        margin-right: auto;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #80c997;
+        box-shadow: 0 0 12px #80c997;
+      }
+      .suggestions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 15px 0 12px;
+      }
+      .suggestion {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.07);
+        color: #dfe9e0;
+        border-radius: 999px;
+        padding: 6px 9px;
+        font-size: 11px;
+      }
+      .chat {
+        flex: 1;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        padding: 3px 2px;
+      }
+      .bubble {
+        max-width: 92%;
+        padding: 10px 12px;
+        border-radius: 15px;
+        line-height: 1.55;
+        font-size: 12.5px;
+      }
+      .bubble.bot {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        align-self: flex-start;
+      }
+      .bubble.user {
+        background: linear-gradient(120deg, #678161, #9a836f);
+        align-self: flex-end;
+        color: white;
+      }
+      .chat-form {
+        display: flex;
+        gap: 7px;
+        margin-top: 11px;
+      }
+      .chat-form input {
+        min-width: 0;
+        flex: 1;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+        border-radius: 13px;
+        padding: 10px 11px;
+        outline: 0;
+      }
+      .chat-form input::placeholder {
+        color: #95a59a;
+      }
+      .chat-form button {
+        width: 40px;
+        border: 0;
+        border-radius: 12px;
+        background: #d7e4d6;
+        color: #203123;
+        font-weight: 900;
+      }
+      .project-hero {
+        padding: 20px;
+        background: linear-gradient(
+          120deg,
+          rgba(255, 255, 255, 0.88),
+          rgba(224, 233, 221, 0.72)
+        );
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        margin-bottom: 14px;
+        box-shadow: var(--shadow);
+      }
+      body.dark .project-hero {
+        background: linear-gradient(
+          120deg,
+          rgba(31, 48, 34, 0.88),
+          rgba(52, 64, 49, 0.72)
+        );
+      }
+      .breadcrumbs {
+        color: var(--mute);
+        font-size: 12px;
+        margin-bottom: 11px;
+      }
+      .hero-grid {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+      .hero-main {
+        flex: 1;
+      }
+      .hero-main h1 {
+        font-size: 25px;
+        margin: 0 0 6px;
+      }
+      .hero-actions {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+      }
+      .project-tabs {
+        display: flex;
+        gap: 5px;
+        overflow: auto;
+        padding: 5px;
+        background: rgba(255, 255, 255, 0.4);
+        border: 1px solid var(--line);
+        border-radius: 15px;
+        margin-bottom: 15px;
+      }
+      .ptab {
+        border: 0;
+        background: transparent;
+        color: var(--mute);
+        white-space: nowrap;
+        padding: 8px 13px;
+        border-radius: 11px;
+        font-weight: 700;
+      }
+      .ptab.active {
+        background: var(--card);
+        color: var(--ink);
+        box-shadow: 0 5px 15px rgba(30, 50, 35, 0.08);
+      }
+      .kpi-strip {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .soft-kpi {
+        padding: 14px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.48);
+        border: 1px solid var(--line);
+      }
+      .soft-kpi span {
+        display: block;
+        color: var(--mute);
+        font-size: 11px;
+      }
+      .soft-kpi strong {
+        display: block;
+        font-size: 20px;
+        margin-top: 3px;
+      }
+      .timeline {
+        display: grid;
+        gap: 0;
+      }
+      .event {
+        display: grid;
+        grid-template-columns: 58px 14px 1fr;
+        gap: 9px;
+        position: relative;
+        padding-bottom: 17px;
+      }
+      .event:before {
+        content: "";
+        position: absolute;
+        right: 64px;
+        top: 14px;
+        bottom: 0;
+        width: 1px;
+        background: var(--line);
+      }
+      .event:last-child:before {
+        display: none;
+      }
+      .event-dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: var(--leaf);
+        margin-top: 5px;
+        box-shadow: 0 0 0 5px rgba(96, 118, 91, 0.12);
+        z-index: 1;
+      }
+      .event h3 {
+        font-size: 13px;
+        margin: 0 0 3px;
+      }
+      .event p {
+        margin: 0;
+        color: var(--mute);
+        font-size: 12px;
+      }
+      .event-cost {
+        font-weight: 700;
+        color: var(--olive);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 590px;
+      }
+      .tablewrap {
+        overflow: auto;
+      }
+      th,
+      td {
+        text-align: right;
+        padding: 11px 9px;
+        border-bottom: 1px solid var(--line);
+        font-size: 12px;
+      }
+      th {
+        color: var(--mute);
+        font-weight: 600;
+      }
+      tbody tr:hover {
+        background: rgba(96, 118, 91, 0.05);
+      }
+      tfoot td {
+        font-weight: 800;
+        font-size: 13px;
+      }
+      .task {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 11px;
+        border-bottom: 1px solid var(--line);
+      }
+      .task:last-child {
+        border-bottom: 0;
+      }
+      .check {
+        width: 20px;
+        height: 20px;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        display: grid;
+        place-items: center;
+        color: white;
+        background: transparent;
+      }
+      .check.done {
+        background: var(--green);
+      }
+      .task-main {
+        flex: 1;
+      }
+      .task-main strong {
+        display: block;
+        font-size: 13px;
+      }
+      .file-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 10px;
+      }
+      .file {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.35);
+      }
+      .file-icon {
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+      .file strong {
+        display: block;
+      }
+      .file span {
+        font-size: 11px;
+        color: var(--mute);
+      }
+      .insight-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+      .insight {
+        min-height: 170px;
+      }
+      .bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 11px;
+        height: 95px;
+        margin-top: 15px;
+      }
+      .bar {
+        flex: 1;
+        border-radius: 8px 8px 2px 2px;
+        background: var(--grad);
+        position: relative;
+        min-width: 28px;
+      }
+      .bar span {
+        position: absolute;
+        bottom: -20px;
+        width: 100%;
+        text-align: center;
+        color: var(--mute);
+        font-size: 10px;
+      }
+      .ring {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: conic-gradient(
+          var(--leaf) var(--pct),
+          rgba(96, 118, 91, 0.12) 0
+        );
+        margin: 15px auto 0;
+      }
+      .ring:before {
+        content: "";
+        width: 78px;
+        height: 78px;
+        border-radius: 50%;
+        background: var(--bg);
+        position: absolute;
+      }
+      .ring strong {
+        z-index: 1;
+        font-size: 21px;
+      }
+      .flow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 23px;
+      }
+      .flow-node {
+        padding: 10px;
+        border-radius: 13px;
+        background: rgba(96, 118, 91, 0.1);
+        font-size: 11px;
+        font-weight: 700;
+        text-align: center;
+      }
+      .flow-arrow {
+        color: var(--sage);
+        font-size: 20px;
+      }
+      .tgphone {
+        margin-top: 14px;
+        background: #dbe7eb;
+        border-radius: 22px;
+        padding: 12px;
+        min-height: 360px;
+        border: 1px solid rgba(38, 88, 111, 0.14);
+        background-image: radial-gradient(
+          circle at 20% 15%,
+          rgba(255, 255, 255, 0.45),
+          transparent 22%
+        );
+      }
+      .tghead {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        background: #fff;
+        padding: 10px;
+        border-radius: 14px;
+        margin-bottom: 12px;
+        color: #223;
+      }
+      .tgavatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, #2aabee, #1678b5);
+        color: white;
+        font-weight: 800;
+      }
+      .tgchat {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-height: 235px;
+        max-height: 330px;
+        overflow: auto;
+      }
+      .tgmsg {
+        max-width: 86%;
+        border-radius: 14px;
+        padding: 9px 11px;
+        font-size: 12.5px;
+        line-height: 1.45;
+        box-shadow: 0 2px 6px rgba(30, 50, 60, 0.08);
+      }
+      .tgmsg.user {
+        align-self: flex-start;
+        background: #d8f7c8;
+      }
+      .tgmsg.bot {
+        align-self: flex-end;
+        background: #fff;
+      }
+      .tgtime {
+        display: block;
+        text-align: left;
+        font-size: 9px;
+        color: #7a8b90;
+        margin-top: 3px;
+      }
+      .tgactions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 12px;
+      }
+      .tgaction {
+        border: 0;
+        border-radius: 999px;
+        padding: 8px 11px;
+        background: #2aabee;
+        color: white;
+        font-weight: 700;
+        font-size: 11px;
+      }
+      .modalback {
+        position: fixed;
+        inset: 0;
+        background: rgba(10, 16, 11, 0.58);
+        z-index: 50;
+        display: grid;
+        place-items: center;
+        padding: 16px;
+      }
+      .modal {
+        width: min(560px, 96vw);
+        max-height: 92vh;
+        overflow: auto;
+        background: var(--bg);
+        border: 1px solid var(--line);
+        border-radius: 23px;
+        padding: 20px;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+      }
+      .modal h2 {
+        margin: 0 0 5px;
+      }
+      .modalhead {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+      .close {
+        border: 0;
+        background: rgba(96, 118, 91, 0.1);
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        color: var(--ink);
+      }
+      .field {
+        margin-top: 13px;
+      }
+      .field label {
+        display: block;
+        font-weight: 700;
+        font-size: 12px;
+        margin-bottom: 5px;
+      }
+      .field input,
+      .field textarea,
+      .field select {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 10px;
+        background: var(--card);
+        color: var(--ink);
+        outline: 0;
+      }
+      .field textarea {
+        min-height: 110px;
+        resize: vertical;
+      }
+      .recordbox {
+        border: 1px dashed rgba(96, 118, 91, 0.4);
+        border-radius: 18px;
+        padding: 20px;
+        text-align: center;
+        margin-top: 14px;
+        background: rgba(96, 118, 91, 0.05);
+      }
+      .record {
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        border: 0;
+        background: var(--grad);
+        color: white;
+        font-size: 26px;
+        box-shadow: 0 0 0 9px rgba(96, 118, 91, 0.1);
+      }
+      .record.recording {
+        animation: pulse 1s infinite;
+        background: linear-gradient(135deg, #bd5d52, #d18a69);
+      }
+      .modal-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-start;
+        margin-top: 16px;
+      }
+      .dropzone {
+        border: 1px dashed rgba(96, 118, 91, 0.4);
+        border-radius: 16px;
+        padding: 20px;
+        text-align: center;
+        background: rgba(96, 118, 91, 0.05);
+        margin-top: 12px;
+      }
+      .toast {
+        position: fixed;
+        z-index: 80;
+        bottom: 24px;
+        right: 24px;
+        background: #18251b;
+        color: white;
+        padding: 12px 16px;
+        border-radius: 13px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.22);
+        animation: toastin 0.25s;
+      }
+      .empty {
+        padding: 25px;
+        text-align: center;
+        color: var(--mute);
+      }
+      @keyframes breathe {
+        50% {
+          transform: scale(1.12);
+          opacity: 0.75;
+        }
+      }
+      @keyframes pulse {
+        50% {
+          box-shadow: 0 0 0 15px rgba(189, 93, 82, 0.08);
+        }
+      }
+      @keyframes toastin {
+        from {
+          transform: translateY(12px);
+          opacity: 0;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+          scroll-behavior: auto !important;
+        }
+      }
+      @media (max-width: 1050px) {
+        .shell {
+          grid-template-columns: 1fr;
+        }
+        .agent {
+          position: relative;
+          top: 0;
+          height: 650px;
+        }
+        .grid2 {
+          grid-template-columns: 1fr;
+        }
+        .insight-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .topbar {
+          flex-wrap: wrap;
+        }
+        .top-actions {
+          margin-right: 0;
+          margin-left: auto;
+        }
+      }
+      @media (max-width: 740px) {
+        .topbar {
+          padding: 10px 12px;
+          gap: 8px;
+        }
+        .brand {
+          min-width: auto;
+        }
+        .brand small {
+          display: none;
+        }
+        .mainnav {
+          order: 3;
+          width: 100%;
+          justify-content: space-around;
+        }
+        .navbtn {
+          padding: 7px 12px;
+        }
+        .shell {
+          padding: 12px;
+        }
+        .pagehead {
+          align-items: center;
+        }
+        .pagehead h1 {
+          font-size: 22px;
+        }
+        .desktop-only {
+          display: none;
+        }
+        .metrics {
+          grid-template-columns: 1fr 1fr;
+        }
+        .metric {
+          min-height: 94px;
+        }
+        .project-row {
+          grid-template-columns: 1fr auto;
+        }
+        .project-row > div:nth-child(2),
+        .project-row > div:nth-child(3) {
+          display: none;
+        }
+        .kpi-strip {
+          grid-template-columns: 1fr 1fr;
+        }
+        .hero-grid {
+          display: block;
+        }
+        .hero-actions {
+          margin-top: 13px;
+        }
+        .insight-grid {
+          grid-template-columns: 1fr;
+        }
+        .agent {
+          height: 620px;
+          min-height: 0;
+        }
+        .top-actions .secondary {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brandmark" aria-hidden="true"></div>
+          <div><strong>GENS</strong><small>ניהול פרויקטים חכם</small></div>
+        </div>
+        <nav class="mainnav" aria-label="ניווט ראשי">
+          <button class="navbtn active" data-view="home">בית</button
+          ><button class="navbtn" data-view="projects">פרויקטים</button
+          ><button class="navbtn" data-view="insights">תובנות</button>
+        </nav>
+        <div class="top-actions">
+          <button class="secondary" id="newProjectBtn">＋ פרויקט חדש</button
+          ><button class="primary" id="globalUpdateBtn">✈ סוכן Telegram</button
+          ><button class="iconbtn" id="themeBtn" aria-label="החלפת מצב תצוגה">
+            ☾
+          </button>
+        </div>
+      </header>
+      <main class="shell">
+        <section class="content" id="content"></section>
+        <aside class="agent" aria-label="סוכן נתונים">
+          <div class="agent-inner">
+            <div class="agent-glow"></div>
+            <div class="agent-head">
+              <div class="orb"></div>
+              <div>
+                <h2>GENS Agent</h2>
+                <p>סוכן הדגמה · עונה מנתוני המערכת בלבד</p>
+              </div>
+              <span class="agent-status"></span>
+            </div>
+            <div class="suggestions">
+              <button class="suggestion">מה דורש טיפול?</button
+              ><button class="suggestion">מה הרווחיות?</button
+              ><button class="suggestion">כמה נשאר לגבייה?</button
+              ><button class="suggestion">מה חסר בפרויקט?</button>
+            </div>
+            <div class="chat" id="chat">
+              <div class="bubble bot">
+                אני מחובר לנתוני הדמו של הפרויקטים. אפשר לשאול אותי על מצב,
+                עלויות, רווחיות, תשלומים, עובדים, חוסרים וחריגות.
+              </div>
+            </div>
+            <form class="chat-form" id="chatForm">
+              <input
+                id="chatInput"
+                placeholder="שאל על הנתונים..."
+                autocomplete="off"
+              /><button aria-label="שליחה">←</button>
+            </form>
+          </div>
+        </aside>
+      </main>
+    </div>
+    <div id="overlay"></div>
+    <div id="toastRoot"></div>
+    <script>
+      (function (root, factory) {
   const api = factory();
   if (typeof module === 'object' && module.exports) module.exports = api;
   if (root) root.GensCore = api;
@@ -161,6 +1326,14 @@
     return { contract, cost, paid, profit: contract - cost, alerts, openTasks: state.projects.reduce((s, p) => s + p.tasks.filter(t => !t.done).length, 0) };
   }
   function allAlerts(state) { return state.projects.flatMap(p => p.alerts.map(a => ({ ...a, projectId: p.id, projectName: p.name }))); }
+  function identifyProject(state, text) {
+    const q = String(text || '').toLowerCase().replace(/[–—-]/g, ' ');
+    const direct = state.projects.find(p => {
+      const parts = p.name.toLowerCase().replace('גינת ', '').split(/\s+/).filter(x => x.length > 2);
+      return q.includes(p.name.toLowerCase()) || q.includes(p.location.toLowerCase()) || parts.some(x => q.includes(x));
+    });
+    return direct ? direct.id : null;
+  }
   function parseUpdate(text) {
     const raw = String(text || '').trim();
     const lower = raw.toLowerCase();
@@ -173,14 +1346,14 @@
     const activities = raw.split(/[,.]/).map(x => x.trim()).filter(x => x.length > 2 && !/חסר|קנינו|עלות|הוצאה/.test(x)).slice(0, 3);
     return { raw, crew, numbers: nums, cost: costMatch ? Number(costMatch[1].replace(/,/g, '')) : 0, shortages, extras, activities, ambiguous: hasAmbiguity };
   }
-  function applyUpdate(state, projectId, text) {
+  function applyUpdate(state, projectId, text, source = 'הקלטה חדשה') {
     const project = getProject(state, projectId);
     if (!project) return { ok: false, error: 'project_not_found' };
     const parsed = parseUpdate(text);
     if (!parsed.raw) return { ok: false, error: 'empty_update' };
     if (parsed.ambiguous) return { ok: false, needsClarification: true, parsed, question: 'זיהיתי סכום או ניסוח לא ודאי. איזה סכום נכון לעדכון?' };
     const title = parsed.activities.join(', ') || 'עדכון מהשטח';
-    project.worklog.unshift({ date: 'היום', title, crew: parsed.crew.length ? parsed.crew.join(', ') : 'לא צוין', source: 'הקלטה חדשה', cost: parsed.cost });
+    project.worklog.unshift({ date: 'היום', title, crew: parsed.crew.length ? parsed.crew.join(', ') : 'לא צוין', source, cost: parsed.cost });
     project.updates += 1;
     project.lastUpdate = 'היום';
     if (parsed.cost) {
@@ -220,60 +1393,398 @@
     if (/פרויקט|מצב/.test(q)) return `${p.name} נמצא בשלב ${p.stage} וב־${p.progress}% התקדמות. העדכון האחרון: ${p.lastUpdate}.`;
     return 'לא מצאתי תשובה מבוססת בנתוני הדמו. אפשר לשאול למשל: “מה דורש טיפול?”, “מה הרווחיות?”, “מה חסר בפרויקט?” או “כמה נשאר לגבייה?”.';
   }
-  return { seedProjects, createState, getProject, money, margin, balance, totals, allAlerts, parseUpdate, applyUpdate, resolveAlert, answerAgent };
+  return { seedProjects, createState, getProject, money, margin, balance, totals, allAlerts, identifyProject, parseUpdate, applyUpdate, resolveAlert, answerAgent };
 });
-</script>
-<script>
-(() => {
-  const C = window.GensCore, state = C.createState();
-  const $ = (s, el=document) => el.querySelector(s), $$ = (s, el=document) => [...el.querySelectorAll(s)];
-  const content = $('#content'), overlay = $('#overlay');
-  const esc = s => String(s ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
-  function toast(msg){ $('#toastRoot').innerHTML=`<div class="toast">${esc(msg)}</div>`; setTimeout(()=>$('#toastRoot').innerHTML='',2600); }
-  function setView(view){ state.activeView=view; $$('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===view)); render(); }
-  function projectRow(p){ return `<div class="project-row" data-project="${p.id}" role="button" tabindex="0"><div><div class="project-name">${esc(p.name)}</div><span class="tiny muted">${esc(p.location)} · ${esc(p.stage)}</span><div class="progress"><i style="width:${p.progress}%"></i></div></div><div><span class="tiny muted">עלות מצטברת</span><div class="money">${C.money(p.cost)}</div></div><div><span class="tiny muted">רווחיות חזויה</span><div class="money">${C.margin(p)}%</div></div><button class="row-action" aria-label="פתיחת פרויקט">←</button></div>`; }
-  function alertCard(a){ return `<div class="alert" data-project="${a.projectId}" data-target="${a.target}"><span class="alert-dot ${a.severity}"></span><div><strong>${esc(a.title)}</strong><p>${esc(a.projectName)} · ${esc(a.detail)}</p><div class="linkish">פתיחה בפרויקט ←</div></div></div>`; }
-  function home(){ const t=C.totals(state), alerts=C.allAlerts(state); return `<div class="pagehead"><div><h1>בוקר טוב, מארק</h1><p>תמונה אחת ברורה של כל מה שקורה בפרויקטים.</p></div><span class="badge ok">● הנתונים מעודכנים</span></div><div class="metrics"><div class="metric m1"><div class="label">פרויקטים פעילים</div><div class="value">${state.projects.length}</div><div class="sub">כולם עודכנו השבוע</div></div><div class="metric m2"><div class="label">היקף הצעות</div><div class="value">${C.money(t.contract)}</div><div class="sub">לפני תוספות פתוחות</div></div><div class="metric m3"><div class="label">דורש טיפול</div><div class="value">${t.alerts}</div><div class="sub">חריגות מקושרות לפרויקטים</div></div><div class="metric m4"><div class="label">רווח תפעולי חזוי</div><div class="value">${C.money(t.profit)}</div><div class="sub">לפי הנתונים שנקלטו</div></div></div><div class="grid2"><div><div class="card"><div class="section-title"><h2>פרויקטים פעילים</h2><button class="secondary tiny" data-go="projects">לכל הפרויקטים</button></div><div class="project-list">${state.projects.map(projectRow).join('')}</div></div><div class="card"><div class="section-title"><h2>סיכום שבועי</h2><span class="badge">נוצר אוטומטית</span></div><p>ב־3 הפרויקטים תועדו השבוע 7 עדכונים. בפרויקט לוי נוספו עבודות לאחר חתך העלויות, בפרויקט כהן ממתינות 2 תוספות לתמחור, ובפרויקט ישראלי חסרים מחברי השקיה.</p><button class="secondary" id="copyWeekly">העתקת סיכום</button></div></div><div><div class="card"><div class="section-title"><h2>מה דורש פעולה</h2><span class="badge danger">${alerts.length} פתוחים</span></div><div class="alert-list">${alerts.slice(0,6).map(alertCard).join('')}</div></div><div class="card"><div class="section-title"><h2>זרימת העבודה</h2></div><div class="flow"><div class="flow-node">הקלטה<br>מהשטח</div><div class="flow-arrow">←</div><div class="flow-node">חילוץ<br>אוטומטי</div><div class="flow-arrow">←</div><div class="flow-node">יומן · עלויות<br>ותובנות</div></div></div></div></div>`; }
-  function projects(){ return `<div class="pagehead"><div><h1>פרויקטים</h1><p>כל התיקים במקום אחד — פעילים, שהסתיימו וארכיון.</p></div><button class="primary" id="pageNewProject">＋ פתיחת פרויקט</button></div><div class="card"><div class="section-title"><h2>פעילים</h2><span class="badge">${state.projects.length} פרויקטים</span></div><div class="project-list">${state.projects.map(projectRow).join('')}</div></div><div class="card"><div class="section-title"><h2>הסתיימו לאחרונה</h2></div><div class="empty">אין פרויקטים שהסתיימו בנתוני הדמו.</div></div>`; }
-  function insights(){ const t=C.totals(state), avg=Math.round(state.projects.reduce((s,p)=>s+C.margin(p),0)/state.projects.length); return `<div class="pagehead"><div><h1>תובנות עסקיות</h1><p>השוואות המבוססות על הנתונים שמארק כבר מזין תוך כדי העבודה.</p></div><span class="badge">נכון להיום</span></div><div class="metrics"><div class="metric m1"><div class="label">עלות כוללת</div><div class="value">${C.money(t.cost)}</div><div class="sub">עבודה וחומרים</div></div><div class="metric m2"><div class="label">נגבה עד כה</div><div class="value">${C.money(t.paid)}</div><div class="sub">ברמת הפרויקטים</div></div><div class="metric m3"><div class="label">משימות פתוחות</div><div class="value">${t.openTasks}</div><div class="sub">כולל חוסרים ותוספות</div></div><div class="metric m4"><div class="label">רווחיות ממוצעת</div><div class="value">${avg}%</div><div class="sub">תחזית תפעולית</div></div></div><div class="insight-grid"><div class="card insight"><div class="section-title"><h2>עלות לפי פרויקט</h2></div><div class="bars">${state.projects.map(p=>`<div class="bar" style="height:${Math.max(35,Math.round(p.cost/650))}px"><span>${esc(p.location)}</span></div>`).join('')}</div></div><div class="card insight"><div class="section-title"><h2>רווחיות ממוצעת</h2></div><div class="ring" style="--pct:${avg}%"><strong>${avg}%</strong></div></div><div class="card insight"><div class="section-title"><h2>תובנה מרכזית</h2><span class="badge warn">דורש החלטה</span></div><p><strong>תוספות שאינן מתומחרות</strong></p><p class="muted">בפרויקט כהן קיימות שתי עבודות שכבר בוצעו אך טרם תומחרו. טיפול עכשיו מונע אובדן הכנסה.</p><button class="secondary" data-open-alert="p2">פתיחה בפרויקט</button></div></div><div class="card"><div class="section-title"><h2>השוואת פרויקטים</h2></div><div class="tablewrap"><table><thead><tr><th>פרויקט</th><th>הצעה</th><th>עלות</th><th>רווח חזוי</th><th>יומיות</th><th>חריגות</th></tr></thead><tbody>${state.projects.map(p=>`<tr data-project="${p.id}"><td><strong>${esc(p.name)}</strong></td><td>${C.money(p.contract)}</td><td>${C.money(p.cost)}</td><td>${C.margin(p)}%</td><td>${p.crewDays}</td><td>${p.alerts.length}</td></tr>`).join('')}</tbody></table></div></div>`; }
-  function projectHeader(p){ return `<div class="project-hero"><div class="breadcrumbs"><button class="secondary tiny" data-go="projects">פרויקטים</button> · ${esc(p.name)}</div><div class="hero-grid"><div class="hero-main"><h1>${esc(p.name)}</h1><div class="muted">${esc(p.location)} · ${esc(p.stage)} · עדכון אחרון ${esc(p.lastUpdate)}</div><div style="margin-top:8px">${p.tags.map(t=>`<span class="badge">${esc(t)}</span>`).join(' ')}</div></div><div class="hero-actions"><button class="primary" id="projectRecord">● הקלטת עדכון</button><button class="secondary" id="projectPhotos">▧ תמונות</button><button class="secondary" id="projectFile">⇧ מסמך</button></div></div></div><div class="project-tabs">${[['overview','תקציר'],['worklog','יומן עבודה'],['costs','עלויות ורווחיות'],['execution','ביצוע'],['files','קבצים ותמונות']].map(([id,l])=>`<button class="ptab ${state.activeProjectTab===id?'active':''}" data-ptab="${id}">${l}</button>`).join('')}</div>`; }
-  function projectOverview(p){ return `<div class="kpi-strip"><div class="soft-kpi"><span>התקדמות</span><strong>${p.progress}%</strong><div class="progress"><i style="width:${p.progress}%"></i></div></div><div class="soft-kpi"><span>עלות מצטברת</span><strong>${C.money(p.cost)}</strong></div><div class="soft-kpi"><span>רווח חזוי</span><strong>${C.money(p.contract-p.cost)}</strong></div><div class="soft-kpi"><span>יתרה לגבייה</span><strong>${C.money(C.balance(p))}</strong></div></div><div class="grid2"><div><div class="card"><div class="section-title"><h2>מה קרה לאחרונה</h2><button class="secondary tiny" data-ptab="worklog">לכל היומן</button></div><div class="timeline">${p.worklog.slice(0,4).map(e=>`<div class="event"><strong>${esc(e.date)}</strong><span class="event-dot"></span><div><h3>${esc(e.title)}</h3><p>${esc(e.crew)} · ${esc(e.source)} ${e.cost?`· <span class="event-cost">${C.money(e.cost)}</span>`:''}</p></div></div>`).join('')}</div></div><div class="card"><div class="section-title"><h2>סיכום שבועי</h2><span class="badge">אוטומטי</span></div><p>${esc(p.weekly)}</p></div></div><div><div class="card"><div class="section-title"><h2>חריגות ותובנות</h2><span class="badge danger">${p.alerts.length}</span></div><div class="alert-list">${p.alerts.length?p.alerts.map(a=>alertCard({...a,projectId:p.id,projectName:p.name})).join(''):'<div class="empty">אין חריגות פעילות.</div>'}</div></div><div class="card"><div class="section-title"><h2>השלבים הבאים</h2></div>${p.tasks.filter(t=>!t.done).slice(0,4).map(taskRow).join('')}</div></div></div>`; }
-  function taskRow(t,i){ return `<div class="task"><button class="check ${t.done?'done':''}" data-task="${i}" aria-label="סימון משימה">${t.done?'✓':''}</button><div class="task-main"><strong>${esc(t.title)}</strong><span class="tiny muted">${esc(t.type)}</span></div><span class="badge ${t.priority==='high'?'danger':t.priority==='medium'?'warn':''}">${t.priority==='high'?'דחוף':t.priority==='medium'?'בינוני':'רגיל'}</span></div>`; }
-  function projectWorklog(p){ return `<div class="card"><div class="section-title"><h2>יומן עבודה</h2><button class="primary" id="logUpdate">＋ עדכון</button></div><div class="timeline">${p.worklog.map(e=>`<div class="event"><strong>${esc(e.date)}</strong><span class="event-dot"></span><div><h3>${esc(e.title)}</h3><p>${esc(e.crew)} · מקור: ${esc(e.source)} ${e.cost?`· <span class="event-cost">${C.money(e.cost)}</span>`:''}</p></div></div>`).join('')}</div></div>`; }
-  function projectCosts(p){ return `<div class="metrics"><div class="metric m1"><div class="label">הצעה נטו</div><div class="value">${C.money(p.contract)}</div><div class="sub">הצעה מקורית ${C.money(p.originalContract)}</div></div><div class="metric m2"><div class="label">עלות בפועל</div><div class="value">${C.money(p.cost)}</div><div class="sub">נכון לעדכון האחרון</div></div><div class="metric m4"><div class="label">רווח חזוי</div><div class="value">${C.money(p.contract-p.cost)}</div><div class="sub">${C.margin(p)}% מההצעה</div></div><div class="metric m3"><div class="label">יתרה לגבייה</div><div class="value">${C.money(C.balance(p))}</div><div class="sub">נגבה ${C.money(p.paid)}</div></div></div><div class="card"><div class="section-title"><h2>פירוט עלויות</h2><span class="badge">תפעולי · לא הנהלת חשבונות</span></div><div class="tablewrap"><table><thead><tr><th>פריט</th><th>קטגוריה</th><th>סכום</th><th>סטטוס</th><th>תאריך</th></tr></thead><tbody>${p.costs.map(c=>`<tr><td><strong>${esc(c.name)}</strong></td><td>${esc(c.category)}</td><td>${C.money(c.amount)}</td><td><span class="badge ${c.status==='אחרי חתך'?'warn':'ok'}">${esc(c.status)}</span></td><td>${esc(c.date)}</td></tr>`).join('')}</tbody><tfoot><tr><td colspan="2">סה״כ מערכת</td><td>${C.money(p.cost)}</td><td colspan="2">רווח חזוי ${C.money(p.contract-p.cost)}</td></tr></tfoot></table></div></div>`; }
-  function projectExecution(p){ return `<div class="grid2"><div class="card"><div class="section-title"><h2>משימות, חוסרים והזמנות</h2><span class="badge">${p.tasks.filter(t=>!t.done).length} פתוחים</span></div>${p.tasks.map(taskRow).join('')}</div><div class="card"><div class="section-title"><h2>תוספות ושינויים</h2></div>${p.alerts.filter(a=>/תוספת|מחיר/.test(a.title+a.detail)).map(a=>alertCard({...a,projectId:p.id,projectName:p.name})).join('')||'<div class="empty">אין תוספות פתוחות בפרויקט.</div>'}<button class="secondary" style="margin-top:12px" id="addExtra">＋ תוספת חדשה</button></div></div>`; }
-  function projectFiles(p){ return `<div class="card"><div class="section-title"><h2>קבצים ותמונות</h2><div><button class="secondary" id="filesPhotos">▧ תמונות</button> <button class="primary" id="filesUpload">⇧ העלאה</button></div></div><div class="file-grid">${p.files.map(f=>`<div class="file"><div class="file-icon">${f.type==='תמונות'?'▧':f.type==='מקור'?'◉':'▤'}</div><strong>${esc(f.name)}</strong><span>${esc(f.type)} · ${esc(f.date)}</span></div>`).join('')}</div></div><div class="card"><div class="section-title"><h2>מקורות ושקיפות</h2><span class="badge ok">היסטוריה נשמרת</span></div><p class="muted">כל נתון שחולץ נשאר מקושר להקלטה, לפתק או למסמך המקורי. תיקון חדש יוצר גרסה ואינו מוחק את ההיסטוריה.</p></div>`; }
-  function project(){ const p=C.getProject(state); const body=state.activeProjectTab==='overview'?projectOverview(p):state.activeProjectTab==='worklog'?projectWorklog(p):state.activeProjectTab==='costs'?projectCosts(p):state.activeProjectTab==='execution'?projectExecution(p):projectFiles(p); return projectHeader(p)+body; }
-  function render(){ content.innerHTML=state.activeView==='home'?home():state.activeView==='projects'?projects():state.activeView==='insights'?insights():project(); bind(); }
-  function openProject(id,tab='overview'){ state.currentProjectId=id; state.activeProjectTab=tab; state.activeView='project'; $$('.navbtn').forEach(b=>b.classList.remove('active')); render(); }
-  function modal(inner){ overlay.innerHTML=`<div class="modalback"><div class="modal">${inner}</div></div>`; $('.modalback').addEventListener('click',e=>{if(e.target.classList.contains('modalback'))closeModal()}); $$('.close').forEach(b=>b.onclick=closeModal); }
-  function closeModal(){overlay.innerHTML=''}
-  function updateModal(projectId){ const p=projectId?C.getProject(state,projectId):null; modal(`<div class="modalhead"><div><h2>עדכון חדש</h2><p class="muted">${p?esc(p.name):'בחר פרויקט'}</p></div><button class="close">×</button></div>${p?'':`<div class="field"><label>פרויקט</label><select id="updateProject">${state.projects.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('')}</select></div>`}<div class="recordbox"><button class="record" id="recordBtn">●</button><p><strong>לחץ להדגמת הקלטה</strong></p><span class="tiny muted">אפשר להקליט מספר עדכונים במהלך היום</span></div><div class="field"><label>תמלול / עדכון חופשי</label><textarea id="updateText" placeholder="למשל: היום שחף וכפרי השלימו טפטוף. קנינו קומפוסט ב־800 וחסרים שני מחברים."></textarea></div><div class="modal-actions"><button class="primary" id="processUpdate">שמירה ועיבוד</button><button class="secondary close">ביטול</button></div>`); let rec=false; $('#recordBtn').onclick=()=>{rec=!rec;$('#recordBtn').classList.toggle('recording',rec);$('#recordBtn').textContent=rec?'■':'●'; if(rec){setTimeout(()=>{const ta=$('#updateText'); if(ta){ta.value='היום שחף וכפרי השלימו טפטוף ושתלו עצים. קנינו קומפוסט ב־800 שקל וחסרים שני מחברי 16.';$('#recordBtn').classList.remove('recording');$('#recordBtn').textContent='✓';}},1100)}}; $('#processUpdate').onclick=()=>{const id=p?.id||$('#updateProject').value;const text=$('#updateText').value;const res=C.applyUpdate(state,id,text);if(res.needsClarification){clarifyModal(id,text)}else if(res.ok){closeModal();openProject(id,'overview');toast('העדכון עובד ונשמר בפרויקט')}else toast('יש להזין עדכון קצר')}; }
-  function clarifyModal(id,text){ modal(`<div class="modalhead"><div><h2>רק שאלה אחת</h2><p class="muted">יתר העדכון ברור ויישמר אוטומטית.</p></div><button class="close">×</button></div><div class="card" style="margin-top:14px"><span class="badge warn">אי־בהירות כספית</span><h3>האם הסכום הוא 800 או 1,800 ₪?</h3><p class="muted">מקור: ${esc(text)}</p></div><div class="modal-actions"><button class="primary clarify" data-v="800">800 ₪</button><button class="secondary clarify" data-v="1800">1,800 ₪</button></div>`); $$('.clarify').forEach(b=>b.onclick=()=>{const fixed=text.replace(/\d[\d,]*(?=\s*(?:שקל|₪))/,b.dataset.v).replace(/[?]/g,'');C.applyUpdate(state,id,fixed);closeModal();openProject(id);toast('ההבהרה נשמרה והנתונים עודכנו')}); }
-  function fileModal(kind='מסמך'){ const p=C.getProject(state); modal(`<div class="modalhead"><div><h2>העלאת ${kind}</h2><p class="muted">הקובץ ישויך אוטומטית אל ${esc(p.name)}</p></div><button class="close">×</button></div><div class="dropzone"><div style="font-size:34px">⇧</div><strong>גרירה או בחירת קובץ</strong><p class="muted tiny">PDF, תמונה, Word או Excel</p><input type="file" id="fileInput" style="margin-top:10px"></div><div class="modal-actions"><button class="primary" id="mockUpload">העלאת קובץ לדוגמה</button></div>`); $('#mockUpload').onclick=()=>{p.files.unshift({name:kind==='תמונה'?'תמונה חדשה מהשטח.jpg':'חוזה פרויקט.pdf',type:kind,date:'היום'});closeModal();state.activeProjectTab='files';render();toast('הקובץ נוסף לתיק הפרויקט')}; }
-  function newProjectModal(){ modal(`<div class="modalhead"><div><h2>פתיחת פרויקט</h2><p class="muted">העלאת חוזה יכולה למלא את רוב הפרטים אוטומטית.</p></div><button class="close">×</button></div><div class="dropzone"><div style="font-size:30px">▤</div><strong>העלאת חוזה או הצעת מחיר</strong><p class="tiny muted">בדמו יוצגו נתונים שחולצו אוטומטית</p><button class="secondary" id="extractContract">הדגמת חילוץ</button></div><div class="field"><label>שם פרויקט</label><input id="npName" placeholder="שם הלקוח / הפרויקט"></div><div class="field"><label>כתובת</label><input id="npLoc" placeholder="יישוב"></div><div class="field"><label>סכום הצעה</label><input id="npContract" type="number" placeholder="₪"></div><div class="modal-actions"><button class="primary" id="saveProject">יצירת פרויקט</button></div>`); $('#extractContract').onclick=()=>{$('#npName').value='גינת משפחת ברק';$('#npLoc').value='מיתר';$('#npContract').value='124000';toast('הפרטים חולצו מהמסמך — נדרש רק אישור')}; $('#saveProject').onclick=()=>{toast('בדמו נשמרה טיוטת פרויקט חדשה');closeModal()}; }
-  function bind(){
-    $$('[data-go]').forEach(b=>b.onclick=()=>setView(b.dataset.go));
-    $$('[data-project]').forEach(el=>{el.onclick=()=>openProject(el.dataset.project);el.onkeydown=e=>{if(e.key==='Enter')openProject(el.dataset.project)}});
-    $$('.alert').forEach(el=>el.onclick=()=>openProject(el.dataset.project,el.dataset.target||'overview'));
-    $$('[data-open-alert]').forEach(el=>el.onclick=()=>openProject(el.dataset.openAlert,'execution'));
-    $$('[data-ptab]').forEach(b=>b.onclick=()=>{state.activeProjectTab=b.dataset.ptab;render()});
-    const np=$('#pageNewProject');if(np)np.onclick=newProjectModal;
-    const cp=$('#copyWeekly');if(cp)cp.onclick=()=>toast('הסיכום הועתק — מוכן לשיתוף');
-    ['projectRecord','logUpdate'].forEach(id=>{const b=$('#'+id);if(b)b.onclick=()=>updateModal(state.currentProjectId)});
-    ['projectPhotos','filesPhotos'].forEach(id=>{const b=$('#'+id);if(b)b.onclick=()=>fileModal('תמונה')});
-    ['projectFile','filesUpload'].forEach(id=>{const b=$('#'+id);if(b)b.onclick=()=>fileModal('מסמך')});
-    const ae=$('#addExtra');if(ae)ae.onclick=()=>updateModal(state.currentProjectId);
-    $$('.check').forEach((b,i)=>b.onclick=()=>{const p=C.getProject(state);if(p.tasks[i])p.tasks[i].done=!p.tasks[i].done;render();toast('המשימה עודכנה')});
-  }
-  $$('.navbtn').forEach(b=>b.onclick=()=>setView(b.dataset.view));
-  $('#globalUpdateBtn').onclick=()=>updateModal(null);$('#newProjectBtn').onclick=newProjectModal;
-  $('#themeBtn').onclick=()=>{document.body.classList.toggle('dark');state.theme=document.body.classList.contains('dark')?'dark':'light';$('#themeBtn').textContent=state.theme==='dark'?'☀':'☾'};
-  function sendQuestion(q){ if(!q.trim())return; const chat=$('#chat');chat.insertAdjacentHTML('beforeend',`<div class="bubble user">${esc(q)}</div>`);const ans=C.answerAgent(state,q);setTimeout(()=>{chat.insertAdjacentHTML('beforeend',`<div class="bubble bot">${esc(ans)}</div>`);chat.scrollTop=chat.scrollHeight},180);chat.scrollTop=chat.scrollHeight; }
-  $('#chatForm').onsubmit=e=>{e.preventDefault();const i=$('#chatInput');sendQuestion(i.value);i.value=''};$$('.suggestion').forEach(b=>b.onclick=()=>sendQuestion(b.textContent));
-  window.__GENS_DEMO__={state,render,setView,openProject,updateModal,sendQuestion};
-  render();
-})();
-</script>
-</body>
+
+    </script>
+    <script>
+      (() => {
+        const C = window.GensCore,
+          state = C.createState();
+        const $ = (s, el = document) => el.querySelector(s),
+          $$ = (s, el = document) => [...el.querySelectorAll(s)];
+        const content = $("#content"),
+          overlay = $("#overlay");
+        const esc = (s) =>
+          String(s ?? "").replace(
+            /[&<>'"]/g,
+            (c) =>
+              ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                "'": "&#39;",
+                '"': "&quot;",
+              })[c],
+          );
+        function toast(msg) {
+          $("#toastRoot").innerHTML = `<div class="toast">${esc(msg)}</div>`;
+          setTimeout(() => ($("#toastRoot").innerHTML = ""), 2600);
+        }
+        function setView(view) {
+          state.activeView = view;
+          $$(".navbtn").forEach((b) =>
+            b.classList.toggle("active", b.dataset.view === view),
+          );
+          render();
+        }
+        function projectRow(p) {
+          return `<div class="project-row" data-project="${p.id}" role="button" tabindex="0"><div><div class="project-name">${esc(p.name)}</div><span class="tiny muted">${esc(p.location)} · ${esc(p.stage)}</span><div class="progress"><i style="width:${p.progress}%"></i></div></div><div><span class="tiny muted">עלות מצטברת</span><div class="money">${C.money(p.cost)}</div></div><div><span class="tiny muted">רווחיות חזויה</span><div class="money">${C.margin(p)}%</div></div><button class="row-action" aria-label="פתיחת פרויקט">←</button></div>`;
+        }
+        function alertCard(a) {
+          return `<div class="alert" data-project="${a.projectId}" data-target="${a.target}"><span class="alert-dot ${a.severity}"></span><div><strong>${esc(a.title)}</strong><p>${esc(a.projectName)} · ${esc(a.detail)}</p><div class="linkish">פתיחה בפרויקט ←</div></div></div>`;
+        }
+        function home() {
+          const t = C.totals(state),
+            alerts = C.allAlerts(state);
+          return `<div class="pagehead"><div><h1>בוקר טוב, מארק</h1><p>תמונה אחת ברורה של כל מה שקורה בפרויקטים.</p></div><span class="badge ok">● הנתונים מעודכנים</span></div><div class="metrics"><div class="metric m1"><div class="label">פרויקטים פעילים</div><div class="value">${state.projects.length}</div><div class="sub">כולם עודכנו השבוע</div></div><div class="metric m2"><div class="label">היקף הצעות</div><div class="value">${C.money(t.contract)}</div><div class="sub">לפני תוספות פתוחות</div></div><div class="metric m3"><div class="label">דורש טיפול</div><div class="value">${t.alerts}</div><div class="sub">חריגות מקושרות לפרויקטים</div></div><div class="metric m4"><div class="label">רווח תפעולי חזוי</div><div class="value">${C.money(t.profit)}</div><div class="sub">לפי הנתונים שנקלטו</div></div></div><div class="grid2"><div><div class="card"><div class="section-title"><h2>פרויקטים פעילים</h2><button class="secondary tiny" data-go="projects">לכל הפרויקטים</button></div><div class="project-list">${state.projects.map(projectRow).join("")}</div></div><div class="card"><div class="section-title"><h2>סיכום שבועי</h2><span class="badge">נוצר אוטומטית</span></div><p>ב־3 הפרויקטים תועדו השבוע 7 עדכונים. בפרויקט לוי נוספו עבודות לאחר חתך העלויות, בפרויקט כהן ממתינות 2 תוספות לתמחור, ובפרויקט ישראלי חסרים מחברי השקיה.</p><button class="secondary" id="copyWeekly">העתקת סיכום</button></div></div><div><div class="card"><div class="section-title"><h2>מה דורש פעולה</h2><span class="badge danger">${alerts.length} פתוחים</span></div><div class="alert-list">${alerts.slice(0, 6).map(alertCard).join("")}</div></div><div class="card"><div class="section-title"><h2>זרימת העבודה</h2></div><div class="flow"><div class="flow-node">הקלטה<br>מהשטח</div><div class="flow-arrow">←</div><div class="flow-node">חילוץ<br>אוטומטי</div><div class="flow-arrow">←</div><div class="flow-node">יומן · עלויות<br>ותובנות</div></div></div></div></div>`;
+        }
+        function projects() {
+          return `<div class="pagehead"><div><h1>פרויקטים</h1><p>כל התיקים במקום אחד — פעילים, שהסתיימו וארכיון.</p></div><button class="primary" id="pageNewProject">＋ פתיחת פרויקט</button></div><div class="card"><div class="section-title"><h2>פעילים</h2><span class="badge">${state.projects.length} פרויקטים</span></div><div class="project-list">${state.projects.map(projectRow).join("")}</div></div><div class="card"><div class="section-title"><h2>הסתיימו לאחרונה</h2></div><div class="empty">אין פרויקטים שהסתיימו בנתוני הדמו.</div></div>`;
+        }
+        function insights() {
+          const t = C.totals(state),
+            avg = Math.round(
+              state.projects.reduce((s, p) => s + C.margin(p), 0) /
+                state.projects.length,
+            );
+          return `<div class="pagehead"><div><h1>תובנות עסקיות</h1><p>השוואות המבוססות על הנתונים שמארק כבר מזין תוך כדי העבודה.</p></div><span class="badge">נכון להיום</span></div><div class="metrics"><div class="metric m1"><div class="label">עלות כוללת</div><div class="value">${C.money(t.cost)}</div><div class="sub">עבודה וחומרים</div></div><div class="metric m2"><div class="label">נגבה עד כה</div><div class="value">${C.money(t.paid)}</div><div class="sub">ברמת הפרויקטים</div></div><div class="metric m3"><div class="label">משימות פתוחות</div><div class="value">${t.openTasks}</div><div class="sub">כולל חוסרים ותוספות</div></div><div class="metric m4"><div class="label">רווחיות ממוצעת</div><div class="value">${avg}%</div><div class="sub">תחזית תפעולית</div></div></div><div class="insight-grid"><div class="card insight"><div class="section-title"><h2>עלות לפי פרויקט</h2></div><div class="bars">${state.projects.map((p) => `<div class="bar" style="height:${Math.max(35, Math.round(p.cost / 650))}px"><span>${esc(p.location)}</span></div>`).join("")}</div></div><div class="card insight"><div class="section-title"><h2>רווחיות ממוצעת</h2></div><div class="ring" style="--pct:${avg}%"><strong>${avg}%</strong></div></div><div class="card insight"><div class="section-title"><h2>תובנה מרכזית</h2><span class="badge warn">דורש החלטה</span></div><p><strong>תוספות שאינן מתומחרות</strong></p><p class="muted">בפרויקט כהן קיימות שתי עבודות שכבר בוצעו אך טרם תומחרו. טיפול עכשיו מונע אובדן הכנסה.</p><button class="secondary" data-open-alert="p2">פתיחה בפרויקט</button></div></div><div class="card"><div class="section-title"><h2>השוואת פרויקטים</h2></div><div class="tablewrap"><table><thead><tr><th>פרויקט</th><th>הצעה</th><th>עלות</th><th>רווח חזוי</th><th>יומיות</th><th>חריגות</th></tr></thead><tbody>${state.projects.map((p) => `<tr data-project="${p.id}"><td><strong>${esc(p.name)}</strong></td><td>${C.money(p.contract)}</td><td>${C.money(p.cost)}</td><td>${C.margin(p)}%</td><td>${p.crewDays}</td><td>${p.alerts.length}</td></tr>`).join("")}</tbody></table></div></div>`;
+        }
+        function projectHeader(p) {
+          return `<div class="project-hero"><div class="breadcrumbs"><button class="secondary tiny" data-go="projects">פרויקטים</button> · ${esc(p.name)}</div><div class="hero-grid"><div class="hero-main"><h1>${esc(p.name)}</h1><div class="muted">${esc(p.location)} · ${esc(p.stage)} · עדכון אחרון ${esc(p.lastUpdate)}</div><div style="margin-top:8px">${p.tags.map((t) => `<span class="badge">${esc(t)}</span>`).join(" ")}</div></div><div class="hero-actions"><button class="primary" id="projectTelegram">✈ Telegram</button><button class="secondary" id="projectRecord">● עדכון ישיר</button><button class="secondary" id="projectPhotos">▧ תמונות</button><button class="secondary" id="projectFile">⇧ מסמך</button></div></div></div><div class="project-tabs">${[
+            ["overview", "תקציר"],
+            ["worklog", "יומן עבודה"],
+            ["costs", "עלויות ורווחיות"],
+            ["execution", "ביצוע"],
+            ["files", "קבצים ותמונות"],
+          ]
+            .map(
+              ([id, l]) =>
+                `<button class="ptab ${state.activeProjectTab === id ? "active" : ""}" data-ptab="${id}">${l}</button>`,
+            )
+            .join("")}</div>`;
+        }
+        function projectOverview(p) {
+          return `<div class="kpi-strip"><div class="soft-kpi"><span>התקדמות</span><strong>${p.progress}%</strong><div class="progress"><i style="width:${p.progress}%"></i></div></div><div class="soft-kpi"><span>עלות מצטברת</span><strong>${C.money(p.cost)}</strong></div><div class="soft-kpi"><span>רווח חזוי</span><strong>${C.money(p.contract - p.cost)}</strong></div><div class="soft-kpi"><span>יתרה לגבייה</span><strong>${C.money(C.balance(p))}</strong></div></div><div class="grid2"><div><div class="card"><div class="section-title"><h2>מה קרה לאחרונה</h2><button class="secondary tiny" data-ptab="worklog">לכל היומן</button></div><div class="timeline">${p.worklog
+            .slice(0, 4)
+            .map(
+              (e) =>
+                `<div class="event"><strong>${esc(e.date)}</strong><span class="event-dot"></span><div><h3>${esc(e.title)}</h3><p>${esc(e.crew)} · ${esc(e.source)} ${e.cost ? `· <span class="event-cost">${C.money(e.cost)}</span>` : ""}</p></div></div>`,
+            )
+            .join(
+              "",
+            )}</div></div><div class="card"><div class="section-title"><h2>סיכום שבועי</h2><span class="badge">אוטומטי</span></div><p>${esc(p.weekly)}</p></div></div><div><div class="card"><div class="section-title"><h2>חריגות ותובנות</h2><span class="badge danger">${p.alerts.length}</span></div><div class="alert-list">${p.alerts.length ? p.alerts.map((a) => alertCard({ ...a, projectId: p.id, projectName: p.name })).join("") : '<div class="empty">אין חריגות פעילות.</div>'}</div></div><div class="card"><div class="section-title"><h2>השלבים הבאים</h2></div>${p.tasks
+            .filter((t) => !t.done)
+            .slice(0, 4)
+            .map(taskRow)
+            .join("")}</div></div></div>`;
+        }
+        function taskRow(t, i) {
+          return `<div class="task"><button class="check ${t.done ? "done" : ""}" data-task="${i}" aria-label="סימון משימה">${t.done ? "✓" : ""}</button><div class="task-main"><strong>${esc(t.title)}</strong><span class="tiny muted">${esc(t.type)}</span></div><span class="badge ${t.priority === "high" ? "danger" : t.priority === "medium" ? "warn" : ""}">${t.priority === "high" ? "דחוף" : t.priority === "medium" ? "בינוני" : "רגיל"}</span></div>`;
+        }
+        function projectWorklog(p) {
+          return `<div class="card"><div class="section-title"><h2>יומן עבודה</h2><button class="primary" id="logUpdate">＋ עדכון</button></div><div class="timeline">${p.worklog.map((e) => `<div class="event"><strong>${esc(e.date)}</strong><span class="event-dot"></span><div><h3>${esc(e.title)}</h3><p>${esc(e.crew)} · מקור: ${esc(e.source)} ${e.cost ? `· <span class="event-cost">${C.money(e.cost)}</span>` : ""}</p></div></div>`).join("")}</div></div>`;
+        }
+        function projectCosts(p) {
+          return `<div class="metrics"><div class="metric m1"><div class="label">הצעה נטו</div><div class="value">${C.money(p.contract)}</div><div class="sub">הצעה מקורית ${C.money(p.originalContract)}</div></div><div class="metric m2"><div class="label">עלות בפועל</div><div class="value">${C.money(p.cost)}</div><div class="sub">נכון לעדכון האחרון</div></div><div class="metric m4"><div class="label">רווח חזוי</div><div class="value">${C.money(p.contract - p.cost)}</div><div class="sub">${C.margin(p)}% מההצעה</div></div><div class="metric m3"><div class="label">יתרה לגבייה</div><div class="value">${C.money(C.balance(p))}</div><div class="sub">נגבה ${C.money(p.paid)}</div></div></div><div class="card"><div class="section-title"><h2>פירוט עלויות</h2><span class="badge">תפעולי · לא הנהלת חשבונות</span></div><div class="tablewrap"><table><thead><tr><th>פריט</th><th>קטגוריה</th><th>סכום</th><th>סטטוס</th><th>תאריך</th></tr></thead><tbody>${p.costs.map((c) => `<tr><td><strong>${esc(c.name)}</strong></td><td>${esc(c.category)}</td><td>${C.money(c.amount)}</td><td><span class="badge ${c.status === "אחרי חתך" ? "warn" : "ok"}">${esc(c.status)}</span></td><td>${esc(c.date)}</td></tr>`).join("")}</tbody><tfoot><tr><td colspan="2">סה״כ מערכת</td><td>${C.money(p.cost)}</td><td colspan="2">רווח חזוי ${C.money(p.contract - p.cost)}</td></tr></tfoot></table></div></div>`;
+        }
+        function projectExecution(p) {
+          return `<div class="grid2"><div class="card"><div class="section-title"><h2>משימות, חוסרים והזמנות</h2><span class="badge">${p.tasks.filter((t) => !t.done).length} פתוחים</span></div>${p.tasks.map(taskRow).join("")}</div><div class="card"><div class="section-title"><h2>תוספות ושינויים</h2></div>${
+            p.alerts
+              .filter((a) => /תוספת|מחיר/.test(a.title + a.detail))
+              .map((a) =>
+                alertCard({ ...a, projectId: p.id, projectName: p.name }),
+              )
+              .join("") || '<div class="empty">אין תוספות פתוחות בפרויקט.</div>'
+          }<button class="secondary" style="margin-top:12px" id="addExtra">＋ תוספת חדשה</button></div></div>`;
+        }
+        function projectFiles(p) {
+          return `<div class="card"><div class="section-title"><h2>קבצים ותמונות</h2><div><button class="secondary" id="filesPhotos">▧ תמונות</button> <button class="primary" id="filesUpload">⇧ העלאה</button></div></div><div class="file-grid">${p.files.map((f) => `<div class="file"><div class="file-icon">${f.type === "תמונות" ? "▧" : f.type === "מקור" ? "◉" : "▤"}</div><strong>${esc(f.name)}</strong><span>${esc(f.type)} · ${esc(f.date)}</span></div>`).join("")}</div></div><div class="card"><div class="section-title"><h2>מקורות ושקיפות</h2><span class="badge ok">היסטוריה נשמרת</span></div><p class="muted">כל נתון שחולץ נשאר מקושר להקלטה, לפתק או למסמך המקורי. תיקון חדש יוצר גרסה ואינו מוחק את ההיסטוריה.</p></div>`;
+        }
+        function project() {
+          const p = C.getProject(state);
+          const body =
+            state.activeProjectTab === "overview"
+              ? projectOverview(p)
+              : state.activeProjectTab === "worklog"
+                ? projectWorklog(p)
+                : state.activeProjectTab === "costs"
+                  ? projectCosts(p)
+                  : state.activeProjectTab === "execution"
+                    ? projectExecution(p)
+                    : projectFiles(p);
+          return projectHeader(p) + body;
+        }
+        function render() {
+          content.innerHTML =
+            state.activeView === "home"
+              ? home()
+              : state.activeView === "projects"
+                ? projects()
+                : state.activeView === "insights"
+                  ? insights()
+                  : project();
+          if (state.activeView === "home") {
+            const nodes = $$(".flow-node", content);
+            if (nodes.length === 3) {
+              nodes[0].innerHTML = "שם פרויקט +<br>הודעה / קול";
+              nodes[1].innerHTML = "סוכן Telegram<br>מחלץ ומסווג";
+            }
+          }
+          bind();
+        }
+        function openProject(id, tab = "overview") {
+          state.currentProjectId = id;
+          state.activeProjectTab = tab;
+          state.activeView = "project";
+          $$(".navbtn").forEach((b) => b.classList.remove("active"));
+          render();
+        }
+        function modal(inner) {
+          overlay.innerHTML = `<div class="modalback"><div class="modal">${inner}</div></div>`;
+          $(".modalback").addEventListener("click", (e) => {
+            if (e.target.classList.contains("modalback")) closeModal();
+          });
+          $$(".close").forEach((b) => (b.onclick = closeModal));
+        }
+        function closeModal() {
+          overlay.innerHTML = "";
+        }
+        function telegramModal(projectId) {
+          const selected = projectId ? C.getProject(state, projectId) : null;
+          modal(`<div class="modalhead"><div><h2>סוכן GENS ב־Telegram</h2><p class="muted">סימולציה: ממשק העבודה היומי של מארק</p></div><button class="close">×</button></div><div class="tgphone"><div class="tghead"><div class="tgavatar">G</div><div><strong>GENS Agent</strong><div class="tiny muted">מחובר למערכת הפרויקטים</div></div></div><div class="tgchat" id="tgChat"><div class="tgmsg bot">שלח שם פרויקט ואת כל מה שקרה — בהודעה, בהקלטה, בתמונה או במסמך. אשאל רק אם משהו לא ברור.<span class="tgtime">עכשיו</span></div>${selected ? `<div class="tgmsg bot">ההקשר הנוכחי: <strong>${esc(selected.name)}</strong>.<span class="tgtime">עכשיו</span></div>` : ""}</div><div class="tgactions"><button class="tgaction" id="tgVoice">▶ הקלטה לדוגמה</button><button class="tgaction" id="tgAmbiguous">? אי־בהירות</button><button class="tgaction" id="tgAsk">⌕ תשאול נתונים</button></div></div><p class="tiny muted" style="margin-top:10px">הדמו מדמה את החיבור. במוצר אמיתי Telegram Bot יעביר את ההודעות לשרת מאובטח ולעדכון מסד הנתונים.</p>`);
+          const chat = $("#tgChat");
+          const add = (kind, html) => {
+            chat.insertAdjacentHTML("beforeend", `<div class="tgmsg ${kind}">${html}<span class="tgtime">עכשיו</span></div>`);
+            chat.scrollTop = chat.scrollHeight;
+          };
+          const resolveProject = (text) => selected?.id || C.identifyProject(state, text);
+          $("#tgVoice").onclick = () => {
+            const text = selected
+              ? "היום שחף וכפרי השלימו טפטוף ושתלו עצים. קנינו קומפוסט ב־800 שקל וחסרים שני מחברי 16."
+              : "פרויקט לוי — היום שחף וכפרי השלימו טפטוף ושתלו עצים. קנינו קומפוסט ב־800 שקל וחסרים שני מחברי 16.";
+            add("user", `🎤 ${esc(text)}`);
+            const id = resolveProject(text);
+            const res = C.applyUpdate(state, id, text, "Telegram · הודעה קולית");
+            if (res.ok) {
+              add("bot", `זיהיתי את <strong>${esc(res.project.name)}</strong>. היומן, העלויות והחוסרים עודכנו אוטומטית. אין צורך באישור נוסף. <button class="secondary tiny" id="tgOpen">פתיחה בפרויקט</button>`);
+              $("#tgOpen").onclick = () => { closeModal(); openProject(id, "overview"); };
+            } else add("bot", "לא הצלחתי לזהות את הפרויקט. אפשר לבחור אותו מהרשימה?");
+          };
+          $("#tgAmbiguous").onclick = () => {
+            const text = selected
+              ? "קנינו חומר השקיה ב־800 או 1,800 שקל?"
+              : "פרויקט לוי — קנינו חומר השקיה ב־800 או 1,800 שקל?";
+            add("user", esc(text));
+            const id = resolveProject(text);
+            add("bot", `יתר העדכון ברור. רק כדי שלא אשמור סכום שגוי: <strong>800 או 1,800 ₪?</strong><div class="tgactions"><button class="tgaction tgResolve" data-v="800">800 ₪</button><button class="tgaction tgResolve" data-v="1800">1,800 ₪</button></div>`);
+            $$(".tgResolve", chat).forEach((b) => (b.onclick = () => {
+              const fixed = text.replace(/800 או 1,800/, b.dataset.v).replace("?", "");
+              C.applyUpdate(state, id, fixed, "Telegram · הבהרה");
+              add("user", `${b.dataset.v} ₪`); add("bot", "הובהר ונשמר. הדשבורד עודכן.");
+              $$(".tgResolve", chat).forEach((x) => (x.disabled = true));
+            }));
+          };
+          $("#tgAsk").onclick = () => {
+            state.currentProjectId = selected?.id || state.currentProjectId;
+            add("user", "מה דורש טיפול בפרויקט?");
+            add("bot", esc(C.answerAgent(state, "מה דורש טיפול?")));
+          };
+        }
+        function updateModal(projectId) {
+          const p = projectId ? C.getProject(state, projectId) : null;
+          modal(
+            `<div class="modalhead"><div><h2>עדכון חדש</h2><p class="muted">${p ? esc(p.name) : "בחר פרויקט"}</p></div><button class="close">×</button></div>${p ? "" : `<div class="field"><label>פרויקט</label><select id="updateProject">${state.projects.map((x) => `<option value="${x.id}">${esc(x.name)}</option>`).join("")}</select></div>`}<div class="recordbox"><button class="record" id="recordBtn">●</button><p><strong>לחץ להדגמת הקלטה</strong></p><span class="tiny muted">אפשר להקליט מספר עדכונים במהלך היום</span></div><div class="field"><label>תמלול / עדכון חופשי</label><textarea id="updateText" placeholder="למשל: היום שחף וכפרי השלימו טפטוף. קנינו קומפוסט ב־800 וחסרים שני מחברים."></textarea></div><div class="modal-actions"><button class="primary" id="processUpdate">שמירה ועיבוד</button><button class="secondary close">ביטול</button></div>`,
+          );
+          let rec = false;
+          $("#recordBtn").onclick = () => {
+            rec = !rec;
+            $("#recordBtn").classList.toggle("recording", rec);
+            $("#recordBtn").textContent = rec ? "■" : "●";
+            if (rec) {
+              setTimeout(() => {
+                const ta = $("#updateText");
+                if (ta) {
+                  ta.value =
+                    "היום שחף וכפרי השלימו טפטוף ושתלו עצים. קנינו קומפוסט ב־800 שקל וחסרים שני מחברי 16.";
+                  $("#recordBtn").classList.remove("recording");
+                  $("#recordBtn").textContent = "✓";
+                }
+              }, 1100);
+            }
+          };
+          $("#processUpdate").onclick = () => {
+            const id = p?.id || $("#updateProject").value;
+            const text = $("#updateText").value;
+            const res = C.applyUpdate(state, id, text);
+            if (res.needsClarification) {
+              clarifyModal(id, text);
+            } else if (res.ok) {
+              closeModal();
+              openProject(id, "overview");
+              toast("העדכון עובד ונשמר בפרויקט");
+            } else toast("יש להזין עדכון קצר");
+          };
+        }
+        function clarifyModal(id, text) {
+          modal(
+            `<div class="modalhead"><div><h2>רק שאלה אחת</h2><p class="muted">יתר העדכון ברור ויישמר אוטומטית.</p></div><button class="close">×</button></div><div class="card" style="margin-top:14px"><span class="badge warn">אי־בהירות כספית</span><h3>האם הסכום הוא 800 או 1,800 ₪?</h3><p class="muted">מקור: ${esc(text)}</p></div><div class="modal-actions"><button class="primary clarify" data-v="800">800 ₪</button><button class="secondary clarify" data-v="1800">1,800 ₪</button></div>`,
+          );
+          $$(".clarify").forEach(
+            (b) =>
+              (b.onclick = () => {
+                const fixed = text
+                  .replace(/\d[\d,]*(?=\s*(?:שקל|₪))/, b.dataset.v)
+                  .replace(/[?]/g, "");
+                C.applyUpdate(state, id, fixed);
+                closeModal();
+                openProject(id);
+                toast("ההבהרה נשמרה והנתונים עודכנו");
+              }),
+          );
+        }
+        function fileModal(kind = "מסמך") {
+          const p = C.getProject(state);
+          modal(
+            `<div class="modalhead"><div><h2>העלאת ${kind}</h2><p class="muted">הקובץ ישויך אוטומטית אל ${esc(p.name)}</p></div><button class="close">×</button></div><div class="dropzone"><div style="font-size:34px">⇧</div><strong>גרירה או בחירת קובץ</strong><p class="muted tiny">PDF, תמונה, Word או Excel</p><input type="file" id="fileInput" style="margin-top:10px"></div><div class="modal-actions"><button class="primary" id="mockUpload">העלאת קובץ לדוגמה</button></div>`,
+          );
+          $("#mockUpload").onclick = () => {
+            p.files.unshift({
+              name:
+                kind === "תמונה" ? "תמונה חדשה מהשטח.jpg" : "חוזה פרויקט.pdf",
+              type: kind,
+              date: "היום",
+            });
+            closeModal();
+            state.activeProjectTab = "files";
+            render();
+            toast("הקובץ נוסף לתיק הפרויקט");
+          };
+        }
+        function newProjectModal() {
+          modal(
+            `<div class="modalhead"><div><h2>פתיחת פרויקט</h2><p class="muted">העלאת חוזה יכולה למלא את רוב הפרטים אוטומטית.</p></div><button class="close">×</button></div><div class="dropzone"><div style="font-size:30px">▤</div><strong>העלאת חוזה או הצעת מחיר</strong><p class="tiny muted">בדמו יוצגו נתונים שחולצו אוטומטית</p><button class="secondary" id="extractContract">הדגמת חילוץ</button></div><div class="field"><label>שם פרויקט</label><input id="npName" placeholder="שם הלקוח / הפרויקט"></div><div class="field"><label>כתובת</label><input id="npLoc" placeholder="יישוב"></div><div class="field"><label>סכום הצעה</label><input id="npContract" type="number" placeholder="₪"></div><div class="modal-actions"><button class="primary" id="saveProject">יצירת פרויקט</button></div>`,
+          );
+          $("#extractContract").onclick = () => {
+            $("#npName").value = "גינת משפחת ברק";
+            $("#npLoc").value = "מיתר";
+            $("#npContract").value = "124000";
+            toast("הפרטים חולצו מהמסמך — נדרש רק אישור");
+          };
+          $("#saveProject").onclick = () => {
+            toast("בדמו נשמרה טיוטת פרויקט חדשה");
+            closeModal();
+          };
+        }
+        function bind() {
+          $$("[data-go]").forEach(
+            (b) => (b.onclick = () => setView(b.dataset.go)),
+          );
+          $$("[data-project]").forEach((el) => {
+            el.onclick = () => openProject(el.dataset.project);
+            el.onkeydown = (e) => {
+              if (e.key === "Enter") openProject(el.dataset.project);
+            };
+          });
+          $$(".alert").forEach(
+            (el) =>
+              (el.onclick = () =>
+                openProject(
+                  el.dataset.project,
+                  el.dataset.target || "overview",
+                )),
+          );
+          $$("[data-open-alert]").forEach(
+            (el) =>
+              (el.onclick = () =>
+                openProject(el.dataset.openAlert, "execution")),
+          );
+          $$("[data-ptab]").forEach(
+            (b) =>
+              (b.onclick = () => {
+                state.activeProjectTab = b.dataset.ptab;
+                render();
+              }),
+          );
+          const np = $("#pageNewProject");
+          if (np) np.onclick = newProjectModal;
+          const cp = $("#copyWeekly");
+          if (cp) cp.onclick = () => toast("הסיכום הועתק — מוכן לשיתוף");
+          const pt = $("#projectTelegram");
+          if (pt) pt.onclick = () => telegramModal(state.currentProjectId);
+          ["projectRecord", "logUpdate"].forEach((id) => {
+            const b = $("#" + id);
+            if (b) b.onclick = () => updateModal(state.currentProjectId);
+          });
+          ["projectPhotos", "filesPhotos"].forEach((id) => {
+            const b = $("#" + id);
+            if (b) b.onclick = () => fileModal("תמונה");
+          });
+          ["projectFile", "filesUpload"].forEach((id) => {
+            const b = $("#" + id);
+            if (b) b.onclick = () => fileModal("מסמך");
+          });
+          const ae = $("#addExtra");
+          if (ae) ae.onclick = () => updateModal(state.currentProjectId);
+          $$(".check").forEach(
+            (b, i) =>
+              (b.onclick = () => {
+                const p = C.getProject(state);
+                if (p.tasks[i]) p.tasks[i].done = !p.tasks[i].done;
+                render();
+                toast("המשימה עודכנה");
+              }),
+          );
+        }
+        $$(".navbtn").forEach(
+          (b) => (b.onclick = () => setView(b.dataset.view)),
+        );
+        $("#globalUpdateBtn").onclick = () => telegramModal(null);
+        $("#newProjectBtn").onclick = newProjectModal;
+        $("#themeBtn").onclick = () => {
+          document.body.classList.toggle("dark");
+          state.theme = document.body.classList.contains("dark")
+            ? "dark"
+            : "light";
+          $("#themeBtn").textContent = state.theme === "dark" ? "☀" : "☾";
+        };
+        function sendQuestion(q) {
+          if (!q.trim()) return;
+          const chat = $("#chat");
+          chat.insertAdjacentHTML(
+            "beforeend",
+            `<div class="bubble user">${esc(q)}</div>`,
+          );
+          const ans = C.answerAgent(state, q);
+          setTimeout(() => {
+            chat.insertAdjacentHTML(
+              "beforeend",
+              `<div class="bubble bot">${esc(ans)}</div>`,
+            );
+            chat.scrollTop = chat.scrollHeight;
+          }, 180);
+          chat.scrollTop = chat.scrollHeight;
+        }
+        $("#chatForm").onsubmit = (e) => {
+          e.preventDefault();
+          const i = $("#chatInput");
+          sendQuestion(i.value);
+          i.value = "";
+        };
+        $$(".suggestion").forEach(
+          (b) => (b.onclick = () => sendQuestion(b.textContent)),
+        );
+        window.__GENS_DEMO__ = {
+          state,
+          render,
+          setView,
+          openProject,
+          updateModal,
+          telegramModal,
+          sendQuestion,
+        };
+        render();
+      })();
+    </script>
+  </body>
 </html>
