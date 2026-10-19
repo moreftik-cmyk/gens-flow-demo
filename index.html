@@ -225,6 +225,28 @@
         gap: 12px;
         margin-bottom: 16px;
       }
+      .workers-summary {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 14px;
+      }
+      .worker-stat {
+        background: var(--soft);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 12px;
+      }
+      .worker-stat span {
+        display: block;
+        color: var(--mute);
+        font-size: 12px;
+      }
+      .worker-stat strong {
+        display: block;
+        margin-top: 5px;
+        font-size: 20px;
+      }
       .metric {
         min-height: 106px;
         border-radius: 18px;
@@ -1129,6 +1151,9 @@
         .metrics {
           grid-template-columns: 1fr 1fr;
         }
+        .workers-summary {
+          grid-template-columns: 1fr;
+        }
         .metric {
           min-height: 94px;
         }
@@ -1638,12 +1663,23 @@
     },
   ];
 
+  const seedWorkers = [
+    { id: "w1", name: "שחף", dailyRate: 633, days: 20 },
+    { id: "w2", name: "כפרי", dailyRate: 633, days: 18 },
+    { id: "w3", name: "דור", dailyRate: 600, days: 12 },
+    { id: "w4", name: "רון", dailyRate: 600, days: 8 },
+    { id: "w5", name: "סהר", dailyRate: 600, days: 5 },
+    { id: "w6", name: "ניר", dailyRate: 0, days: 3 },
+    { id: "w7", name: "עפרי", dailyRate: 600, days: 3 },
+  ];
+
   function clone(value) {
     return JSON.parse(JSON.stringify(value));
   }
   function createState() {
     return {
       projects: clone(seedProjects),
+      workers: clone(seedWorkers),
       currentProjectId: "p3",
       activeView: "home",
       activeProjectTab: "overview",
@@ -1685,6 +1721,24 @@
         0,
       ),
     };
+  }
+  function workerTotals(state) {
+    const workers = state.workers || [];
+    return {
+      laborCost: state.projects.reduce(
+        (sum, project) => sum + project.labor,
+        0,
+      ),
+      workerDays: workers.reduce((sum, worker) => sum + worker.days, 0),
+      missingRates: workers.filter((worker) => !worker.dailyRate).length,
+      activeWorkers: workers.length,
+    };
+  }
+  function updateWorkerRate(state, workerId, dailyRate) {
+    const worker = (state.workers || []).find((item) => item.id === workerId);
+    if (!worker) return { ok: false, error: "worker_not_found" };
+    worker.dailyRate = Math.max(0, Number(dailyRate) || 0);
+    return { ok: true, worker };
   }
   function allAlerts(state) {
     return state.projects.flatMap((p) =>
@@ -1764,13 +1818,33 @@
         parsed,
         question: "זיהיתי סכום או ניסוח לא ודאי. איזה סכום נכון לעדכון?",
       };
+    const mentionedWorkers = parsed.crew.map((name) =>
+      (state.workers || []).find((worker) => worker.name === name),
+    );
+    const missingRate = mentionedWorkers.find(
+      (worker) => worker && !worker.dailyRate,
+    );
+    if (missingRate)
+      return {
+        ok: false,
+        needsClarification: true,
+        parsed,
+        question: `מה התעריף היומי של ${missingRate.name}?`,
+      };
+    const dayUnits = /חצי יום/.test(parsed.raw) ? 0.5 : 1;
+    const laborCost = mentionedWorkers.reduce(
+      (sum, worker) => sum + (worker ? worker.dailyRate * dayUnits : 0),
+      0,
+    );
+    parsed.laborCost = laborCost;
+    parsed.dayUnits = dayUnits;
     const title = parsed.activities.join(", ") || "עדכון מהשטח";
     project.worklog.unshift({
       date: "היום",
       title,
       crew: parsed.crew.length ? parsed.crew.join(", ") : "לא צוין",
       source,
-      cost: parsed.cost,
+      cost: parsed.cost + laborCost,
     });
     project.updates += 1;
     project.lastUpdate = "היום";
@@ -1782,6 +1856,21 @@
         amount: parsed.cost,
         status: "דווח",
         date: "היום",
+      });
+    }
+    if (laborCost) {
+      project.cost += laborCost;
+      project.labor += laborCost;
+      project.crewDays += mentionedWorkers.length * dayUnits;
+      project.costs.unshift({
+        name: `יומיות: ${parsed.crew.join(", ")}`,
+        category: "עבודה",
+        amount: laborCost,
+        status: "דווח בהקלטה",
+        date: "היום",
+      });
+      mentionedWorkers.forEach((worker) => {
+        if (worker) worker.days += dayUnits;
       });
     }
     parsed.shortages.forEach((s, i) =>
@@ -1878,7 +1967,7 @@
         : `לא נמצאו חוסרים או משימות פתוחות ב${p.name}.`;
     }
     if (/עובד|יומיות|צוות/.test(q))
-      return `ב${p.name} תועדו ${p.crewDays} יומיות/ימי צוות ועלות עבודה של ${money(p.labor)}.`;
+      return `ב${p.name} תועדו ${p.crewDays} יומיות/ימי צוות ועלות עבודה של ${money(p.labor)}. התעריפים נשמרים בכרטיסי העובדים, וכל דיווח קולי מעדכן את עלות הפרויקט.`;
     const mentioned = state.projects.find(
       (x) =>
         q.includes(x.name.replace("גינת ", "").toLowerCase()) ||
@@ -1892,12 +1981,15 @@
   }
   return {
     seedProjects,
+    seedWorkers,
     createState,
     getProject,
     money,
     margin,
     balance,
     totals,
+    workerTotals,
+    updateWorkerRate,
     allAlerts,
     identifyProject,
     parseUpdate,
@@ -2041,6 +2133,7 @@
                   : project();
           if (state.activeView === "home") {
             const t = C.totals(state);
+            const wt = C.workerTotals(state);
             const metrics = $$(".metric", content);
             const values = [
               [
@@ -2062,6 +2155,10 @@
               $(".value", el).textContent = values[i][1];
               $(".sub", el).textContent = values[i][2];
             });
+            $(".metrics", content).insertAdjacentHTML(
+              "afterend",
+              `<div class="card"><div class="section-title"><div><h2>עובדים ויומיות</h2><span class="tiny muted">מעקב תפעולי לפי ההקלטות — לא מערכת שכר</span></div><button class="secondary" id="workersDetails">פירוט ועדכון תעריפים</button></div><div class="workers-summary"><div class="worker-stat"><span>עלות עובדים מצטברת</span><strong>${C.money(wt.laborCost)}</strong></div><div class="worker-stat"><span>יומיות שתועדו</span><strong>${wt.workerDays}</strong></div><div class="worker-stat"><span>עובדים ללא תעריף</span><strong>${wt.missingRates}</strong></div></div></div>`,
+            );
             const nodes = $$(".flow-node", content);
             if (nodes.length === 3) {
               nodes[0].innerHTML = "שם פרויקט +<br>הודעה / קול";
@@ -2245,6 +2342,19 @@
           $("#saveTaskUpdate").onclick = () => save(false);
           $("#saveTaskDone").onclick = () => save(true);
         }
+        function workersModal() {
+          modal(
+            `<div class="modalhead"><div><h2>עובדים ויומיות</h2><p class="muted">תעריף יומי נשמר פעם אחת; דיווח קולי מחשב את העלות ומעדכן את הפרויקט.</p></div><button class="close">×</button></div><div class="tablewrap"><table><thead><tr><th>עובד</th><th>תעריף יומי</th><th>יומיות</th><th>עלות מחושבת</th></tr></thead><tbody>${state.workers.map((worker) => `<tr><td><strong>${esc(worker.name)}</strong></td><td><input class="worker-rate" data-worker-rate="${worker.id}" type="number" min="0" value="${worker.dailyRate || ""}" placeholder="חסר"></td><td>${worker.days}</td><td>${worker.dailyRate ? C.money(worker.dailyRate * worker.days) : '<span class="badge warn">נדרש תעריף</span>'}</td></tr>`).join("")}</tbody></table></div><p class="tiny muted">הנתונים והתעריפים בדמו הם מוק־דאטה. המעקב מיועד לעלות תפעולית בפרויקט ואינו מחליף שכר או הנהלת חשבונות.</p><div class="modal-actions"><button class="primary" id="saveWorkerRates">שמירת תעריפים</button></div>`,
+          );
+          $("#saveWorkerRates").onclick = () => {
+            $$("[data-worker-rate]").forEach((input) =>
+              C.updateWorkerRate(state, input.dataset.workerRate, input.value),
+            );
+            closeModal();
+            render();
+            toast("התעריפים נשמרו וישמשו בחישוב ההקלטות הבאות");
+          };
+        }
         function updateModal(projectId) {
           const p = projectId ? C.getProject(state, projectId) : null;
           modal(
@@ -2364,6 +2474,8 @@
           if (np) np.onclick = newProjectModal;
           const cp = $("#copyWeekly");
           if (cp) cp.onclick = () => toast("הסיכום הועתק — מוכן לשיתוף");
+          const wd = $("#workersDetails");
+          if (wd) wd.onclick = workersModal;
           const pt = $("#projectTelegram");
           if (pt) pt.onclick = () => telegramModal(state.currentProjectId);
           ["projectRecord", "logUpdate"].forEach((id) => {
@@ -2442,6 +2554,7 @@
           openProject,
           updateModal,
           taskUpdateModal,
+          workersModal,
           telegramModal,
           sendQuestion,
         };
