@@ -1866,8 +1866,8 @@
     }
     if (/רווח|רווחיות|מרווח/.test(q)) {
       if (/כל|עסק|חברה/.test(q))
-        return `הרווח התפעולי החזוי בכל הפרויקטים הוא ${money(t.profit)} מתוך היקף הצעות של ${money(t.contract)}.`;
-      return `ב${p.name} העלות המצטברת היא ${money(p.cost)} מול הצעה של ${money(p.contract)}. הרווח התפעולי החזוי הוא ${money(p.contract - p.cost)} (${margin(p)}%).`;
+        return `הרווח התפעולי הנוכחי בכל הפרויקטים הוא ${money(t.profit)} מתוך היקף חוזים מאושרים של ${money(t.contract)}, לאחר הוצאות מדווחות של ${money(t.cost)}.`;
+      return `ב${p.name} ההוצאות שדווחו עד כה הן ${money(p.cost)} מול חוזה מאושר של ${money(p.contract)}. הרווח התפעולי הנוכחי הוא ${money(p.contract - p.cost)} (${margin(p)}%).`;
     }
     if (/יתרה|לגבייה|שולם|תשלום/.test(q))
       return `ב${p.name} התקבלו ${money(p.paid)} ונשארו ${money(balance(p))} לפי בסיס ההצעה הנוכחי. קיימת התראה אם בסיס החישוב אינו עקבי.`;
@@ -1941,7 +1941,7 @@
           render();
         }
         function projectRow(p) {
-          return `<div class="project-row" data-project="${p.id}" role="button" tabindex="0"><div><div class="project-name">${esc(p.name)}</div><span class="tiny muted">${esc(p.location)} · ${esc(p.stage)}</span><div class="progress"><i style="width:${p.progress}%"></i></div></div><div><span class="tiny muted">עלות מצטברת</span><div class="money">${C.money(p.cost)}</div></div><div><span class="tiny muted">רווחיות חזויה</span><div class="money">${C.margin(p)}%</div></div><button class="row-action" aria-label="פתיחת פרויקט">←</button></div>`;
+          return `<div class="project-row" data-project="${p.id}" role="button" tabindex="0"><div><div class="project-name">${esc(p.name)}</div><span class="tiny muted">${esc(p.location)} · ${esc(p.stage)}</span><div class="progress"><i style="width:${p.progress}%"></i></div></div><div><span class="tiny muted">הוצאות עד כה</span><div class="money">${C.money(p.cost)}</div></div><div><span class="tiny muted">רווח תפעולי</span><div class="money">${C.money(p.contract - p.cost)}</div></div><button class="row-action" aria-label="פתיחת פרויקט">←</button></div>`;
         }
         function alertCard(a) {
           return `<div class="alert" data-project="${a.projectId}" data-target="${a.target}"><span class="alert-dot ${a.severity}"></span><div><strong>${esc(a.title)}</strong><p>${esc(a.projectName)} · ${esc(a.detail)}</p><div class="linkish">פתיחה בפרויקט ←</div></div></div>`;
@@ -2040,10 +2040,78 @@
                   ? insights()
                   : project();
           if (state.activeView === "home") {
+            const t = C.totals(state);
+            const metrics = $$(".metric", content);
+            const values = [
+              [
+                "היקף חוזים מאושרים",
+                C.money(t.contract),
+                "חוזים ותוספות מאושרות",
+              ],
+              ["הוצאות שדווחו עד כה", C.money(t.cost), "עבודה, חומרים וספקים"],
+              [
+                "רווח תפעולי נוכחי",
+                C.money(t.profit),
+                "חוזים פחות הוצאות שנקלטו",
+              ],
+              ["דורש טיפול", String(t.alerts), "חריגות המקושרות לפרויקטים"],
+            ];
+            metrics.forEach((el, i) => {
+              if (!values[i]) return;
+              $(".label", el).textContent = values[i][0];
+              $(".value", el).textContent = values[i][1];
+              $(".sub", el).textContent = values[i][2];
+            });
             const nodes = $$(".flow-node", content);
             if (nodes.length === 3) {
               nodes[0].innerHTML = "שם פרויקט +<br>הודעה / קול";
               nodes[1].innerHTML = "סוכן Telegram<br>מחלץ ומסווג";
+            }
+          } else if (state.activeView === "project") {
+            const p = C.getProject(state);
+            if (state.activeProjectTab === "overview") {
+              const kpis = $$(".soft-kpi", content);
+              const values = [
+                ["התקדמות", `${p.progress}%`],
+                ["סכום חוזה מאושר", C.money(p.contract)],
+                ["הוצאות עד כה", C.money(p.cost)],
+                ["רווח תפעולי נוכחי", C.money(p.contract - p.cost)],
+              ];
+              kpis.forEach((el, i) => {
+                if (!values[i]) return;
+                $("span", el).textContent = values[i][0];
+                $("strong", el).textContent = values[i][1];
+              });
+            } else if (state.activeProjectTab === "costs") {
+              const metrics = $$(".metric", content);
+              const values = [
+                [
+                  "סכום חוזה מאושר",
+                  C.money(p.contract),
+                  `הצעה מקורית ${C.money(p.originalContract)}`,
+                ],
+                [
+                  "הוצאות שדווחו עד כה",
+                  C.money(p.cost),
+                  "עבודה, חומרים וספקים",
+                ],
+                [
+                  "רווח תפעולי נוכחי",
+                  C.money(p.contract - p.cost),
+                  `${C.margin(p)}% מהחוזה`,
+                ],
+                [
+                  "יתרה לגבייה",
+                  C.money(C.balance(p)),
+                  `נגבה ${C.money(p.paid)}`,
+                ],
+              ];
+              metrics.forEach((el, i) => {
+                if (!values[i]) return;
+                $(".label", el).textContent = values[i][0];
+                $(".value", el).textContent = values[i][1];
+                $(".sub", el).textContent = values[i][2];
+              });
             }
           }
           bind();
