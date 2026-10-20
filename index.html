@@ -1673,12 +1673,215 @@
     { id: "w7", name: "עפרי", dailyRate: 600, days: 3 },
   ];
 
+  const seedPayments = {
+    p3: [
+      {
+        title: "מקדמה בחתימה",
+        amount: 50000,
+        triggerType: "date",
+        dueDate: "02/09",
+        reminderDate: "02/09",
+        status: "התקבל",
+      },
+      {
+        title: "תשלום ביניים",
+        amount: 10000,
+        triggerType: "progress",
+        progressTarget: 45,
+        status: "התקבל",
+      },
+      {
+        title: "תשלום לפי התקדמות",
+        amount: 36210,
+        triggerType: "progress",
+        progressTarget: 75,
+        reminderDate: "היום",
+        status: "מוכן לגבייה",
+      },
+    ],
+    p2: [
+      {
+        title: "מקדמה",
+        amount: 25000,
+        triggerType: "date",
+        dueDate: "14/09",
+        status: "התקבל",
+      },
+      {
+        title: "תשלום ביניים",
+        amount: 25000,
+        triggerType: "progress",
+        progressTarget: 50,
+        status: "התקבל",
+      },
+      {
+        title: "יתרה במסירה",
+        amount: 32000,
+        triggerType: "progress",
+        progressTarget: 95,
+        reminderDate: "בהגעה ל־95%",
+        status: "עתידי",
+      },
+    ],
+    p1: [
+      {
+        title: "מקדמה",
+        amount: 35000,
+        triggerType: "date",
+        dueDate: "06/07",
+        status: "התקבל",
+      },
+      {
+        title: "תשלום שני",
+        amount: 20000,
+        triggerType: "progress",
+        progressTarget: 60,
+        reminderDate: "היום",
+        status: "מוכן לגבייה",
+      },
+      {
+        title: "יתרה במסירה",
+        amount: 21000,
+        triggerType: "progress",
+        progressTarget: 100,
+        reminderDate: "בסיום",
+        status: "עתידי",
+      },
+    ],
+  };
+
+  const seedMaterials = {
+    p3: [
+      {
+        name: "קומפוסט",
+        quantity: "",
+        supplier: "",
+        amount: 2000,
+        date: "30/09",
+        source: "פתק מיובא",
+      },
+      {
+        name: "ברזל",
+        quantity: "",
+        supplier: "איל",
+        amount: 3000,
+        date: "22/10",
+        source: "פתק מיובא",
+      },
+      {
+        name: "ראש מערכת והשקיה",
+        quantity: "",
+        supplier: "",
+        amount: 5000,
+        date: "21/10",
+        source: "פתק מיובא",
+      },
+      {
+        name: "בזלת וחצץ",
+        quantity: "",
+        supplier: "",
+        amount: 6400,
+        date: "16/11",
+        source: "פתק מיובא",
+      },
+      {
+        name: "צמחייה ועצים",
+        quantity: "",
+        supplier: "",
+        amount: 4600,
+        date: "23/10",
+        source: "פתק מיובא",
+      },
+    ],
+    p2: [
+      {
+        name: "ראש מערכת",
+        quantity: "1",
+        supplier: "",
+        amount: 2400,
+        date: "29/09",
+        source: "פתק מיובא",
+      },
+      {
+        name: "חמרה",
+        quantity: "",
+        supplier: "",
+        amount: 2300,
+        date: "15/09",
+        source: "פתק מיובא",
+      },
+      {
+        name: "אבני מדרך",
+        quantity: "",
+        supplier: "",
+        amount: 3500,
+        date: "22/09",
+        source: "פתק מיובא",
+      },
+      {
+        name: "עצים וצמחייה",
+        quantity: "",
+        supplier: "",
+        amount: 20500,
+        date: "30/10",
+        source: "פתק מיובא",
+      },
+    ],
+    p1: [
+      {
+        name: "פרגולה",
+        quantity: "",
+        supplier: "",
+        amount: 6291,
+        date: "06/07",
+        source: "פתק מיובא",
+      },
+      {
+        name: "צמחייה ועצים",
+        quantity: "",
+        supplier: "הוכברג",
+        amount: 13105,
+        date: "23/07",
+        source: "פתק מיובא",
+      },
+      {
+        name: "דשא סינטטי",
+        quantity: "",
+        supplier: "",
+        amount: 1000,
+        date: "23/07",
+        source: "פתק מיובא",
+      },
+      {
+        name: "אבני מדרך",
+        quantity: "",
+        supplier: "פטרה",
+        amount: 2130,
+        date: "23/07",
+        source: "פתק מיובא",
+      },
+      {
+        name: "חלוקי נחל",
+        quantity: "3 בלות",
+        supplier: "",
+        amount: 2850,
+        date: "23/07",
+        source: "פתק מיובא",
+      },
+    ],
+  };
+
   function clone(value) {
     return JSON.parse(JSON.stringify(value));
   }
   function createState() {
+    const projects = clone(seedProjects).map((project) => ({
+      ...project,
+      payments: clone(seedPayments[project.id] || []),
+      materials: clone(seedMaterials[project.id] || []),
+    }));
     return {
-      projects: clone(seedProjects),
+      projects,
       workers: clone(seedWorkers),
       currentProjectId: "p3",
       activeView: "home",
@@ -1705,11 +1908,35 @@
   function balance(project) {
     return Math.max(0, project.contract - project.paid);
   }
+  function paymentTotals(project) {
+    const payments = project.payments || [];
+    return {
+      received: payments
+        .filter((payment) => payment.status === "התקבל")
+        .reduce((sum, payment) => sum + payment.amount, 0),
+      ready: payments
+        .filter((payment) => payment.status === "מוכן לגבייה")
+        .reduce((sum, payment) => sum + payment.amount, 0),
+      remaining: payments
+        .filter((payment) => payment.status !== "התקבל")
+        .reduce((sum, payment) => sum + payment.amount, 0),
+    };
+  }
+  function materialTotals(project) {
+    const materials = project.materials || [];
+    return {
+      count: materials.length,
+      amount: materials.reduce(
+        (sum, item) => sum + (Number(item.amount) || 0),
+        0,
+      ),
+    };
+  }
   function totals(state) {
     const contract = state.projects.reduce((s, p) => s + p.contract, 0);
     const cost = state.projects.reduce((s, p) => s + p.cost, 0);
     const paid = state.projects.reduce((s, p) => s + p.paid, 0);
-    const alerts = state.projects.reduce((s, p) => s + p.alerts.length, 0);
+    const alerts = allAlerts(state).length;
     return {
       contract,
       cost,
@@ -1741,9 +1968,31 @@
     return { ok: true, worker };
   }
   function allAlerts(state) {
-    return state.projects.flatMap((p) =>
-      p.alerts.map((a) => ({ ...a, projectId: p.id, projectName: p.name })),
-    );
+    return state.projects.flatMap((p) => {
+      const projectAlerts = p.alerts.map((a) => ({
+        ...a,
+        projectId: p.id,
+        projectName: p.name,
+      }));
+      const paymentAlerts = (p.payments || [])
+        .filter(
+          (payment) =>
+            payment.status === "מוכן לגבייה" ||
+            (payment.status === "עתידי" &&
+              payment.progressTarget &&
+              p.progress >= payment.progressTarget),
+        )
+        .map((payment, index) => ({
+          id: `payment-${p.id}-${index}`,
+          severity: "high",
+          title: "אבן דרך לתשלום דורשת טיפול",
+          detail: `${payment.title} · ${money(payment.amount)} · ${payment.status}`,
+          target: "costs",
+          projectId: p.id,
+          projectName: p.name,
+        }));
+      return [...projectAlerts, ...paymentAlerts];
+    });
   }
   function identifyProject(state, text) {
     const q = String(text || "")
@@ -1770,6 +2019,9 @@
     const hasAmbiguity = /לא ברור|אולי|\?|או\s+\d/.test(raw);
     const costMatch = raw.match(
       /(?:קנינו|עלות|עלה|הוצאה|ב־|ב)\s*(\d[\d,]*)\s*(?:שח|₪)?/,
+    );
+    const purchaseMatch = raw.match(
+      /קנינו\s+([^,.]+?)\s+ב[־-]?\s*(\d[\d,]*)\s*(?:שח|שקל|₪)?/,
     );
     const crew = [
       "שחף",
@@ -1800,6 +2052,7 @@
       crew,
       numbers: nums,
       cost: costMatch ? Number(costMatch[1].replace(/,/g, "")) : 0,
+      materialName: purchaseMatch ? purchaseMatch[1].trim() : "",
       shortages,
       extras,
       activities,
@@ -1857,6 +2110,16 @@
         status: "דווח",
         date: "היום",
       });
+      if (parsed.materialName) {
+        project.materials.unshift({
+          name: parsed.materialName,
+          quantity: "",
+          supplier: "",
+          amount: parsed.cost,
+          date: "היום",
+          source,
+        });
+      }
     }
     if (laborCost) {
       project.cost += laborCost;
@@ -1932,6 +2195,36 @@
     });
     return { ok: true, project, task };
   }
+  function updatePayment(state, projectId, paymentIndex, patch = {}) {
+    const project = getProject(state, projectId);
+    const payment = project && project.payments[Number(paymentIndex)];
+    if (!project || !payment) return { ok: false, error: "payment_not_found" };
+    const wasReceived = payment.status === "התקבל";
+    const previousAmount = Number(payment.amount) || 0;
+    const amount = Math.max(0, Number(patch.amount ?? payment.amount) || 0);
+    const status = patch.status || payment.status;
+    if (wasReceived) project.paid -= previousAmount;
+    if (status === "התקבל") project.paid += amount;
+    payment.amount = amount;
+    payment.status = status;
+    payment.triggerType = patch.triggerType || payment.triggerType || "date";
+    payment.dueDate = String(patch.dueDate ?? payment.dueDate ?? "").trim();
+    payment.reminderDate = String(
+      patch.reminderDate ?? payment.reminderDate ?? "",
+    ).trim();
+    payment.progressTarget = Math.max(
+      0,
+      Number(patch.progressTarget ?? payment.progressTarget) || 0,
+    );
+    payment.note = String(patch.note ?? payment.note ?? "").trim();
+    project.lastUpdate = "היום";
+    state.activity.unshift({
+      projectId: project.id,
+      text: `עדכון תשלום: ${payment.title} — ${status}`,
+      at: new Date().toISOString(),
+    });
+    return { ok: true, project, payment };
+  }
   function resolveAlert(state, projectId, alertId) {
     const p = getProject(state, projectId);
     if (!p) return false;
@@ -1958,8 +2251,23 @@
         return `הרווח התפעולי הנוכחי בכל הפרויקטים הוא ${money(t.profit)} מתוך היקף חוזים מאושרים של ${money(t.contract)}, לאחר הוצאות מדווחות של ${money(t.cost)}.`;
       return `ב${p.name} ההוצאות שדווחו עד כה הן ${money(p.cost)} מול חוזה מאושר של ${money(p.contract)}. הרווח התפעולי הנוכחי הוא ${money(p.contract - p.cost)} (${margin(p)}%).`;
     }
-    if (/יתרה|לגבייה|שולם|תשלום/.test(q))
-      return `ב${p.name} התקבלו ${money(p.paid)} ונשארו ${money(balance(p))} לפי בסיס ההצעה הנוכחי. קיימת התראה אם בסיס החישוב אינו עקבי.`;
+    if (/יתרה|לגבייה|לגבות|שולם|תשלומ/.test(q)) {
+      const next = (p.payments || []).find(
+        (payment) => payment.status !== "התקבל",
+      );
+      return next
+        ? `ב${p.name} התקבלו ${money(p.paid)}. אבן הדרך הבאה היא ${next.title} בסך ${money(next.amount)}, בסטטוס ${next.status}.`
+        : `ב${p.name} כל אבני הדרך לתשלום מסומנות כהתקבלו.`;
+    }
+    if (/רכש|חומר|ציוד/.test(q)) {
+      const mt = materialTotals(p);
+      return `ב${p.name} תועדו ${mt.count} פריטי רכש וחומרים בסך ${money(mt.amount)}. הפריטים האחרונים: ${(
+        p.materials || []
+      )
+        .slice(0, 4)
+        .map((item) => item.name)
+        .join(", ")}.`;
+    }
     if (/חסר|הזמנ|משימ/.test(q)) {
       const open = p.tasks.filter((x) => !x.done);
       return open.length
@@ -1987,6 +2295,8 @@
     money,
     margin,
     balance,
+    paymentTotals,
+    materialTotals,
     totals,
     workerTotals,
     updateWorkerRate,
@@ -1995,6 +2305,7 @@
     parseUpdate,
     applyUpdate,
     updateTask,
+    updatePayment,
     resolveAlert,
     answerAgent,
   };
@@ -2059,6 +2370,7 @@
             ["overview", "תקציר"],
             ["worklog", "יומן עבודה"],
             ["costs", "עלויות ורווחיות"],
+            ["materials", "רכש וחומרים"],
             ["execution", "ביצוע"],
             ["files", "קבצים ותמונות"],
           ]
@@ -2093,7 +2405,12 @@
           return `<div class="card"><div class="section-title"><h2>יומן עבודה</h2><button class="primary" id="logUpdate">＋ עדכון</button></div><div class="timeline">${p.worklog.map((e) => `<div class="event"><strong>${esc(e.date)}</strong><span class="event-dot"></span><div><h3>${esc(e.title)}</h3><p>${esc(e.crew)} · מקור: ${esc(e.source)} ${e.cost ? `· <span class="event-cost">${C.money(e.cost)}</span>` : ""}</p></div></div>`).join("")}</div></div>`;
         }
         function projectCosts(p) {
-          return `<div class="metrics"><div class="metric m1"><div class="label">הצעה נטו</div><div class="value">${C.money(p.contract)}</div><div class="sub">הצעה מקורית ${C.money(p.originalContract)}</div></div><div class="metric m2"><div class="label">עלות בפועל</div><div class="value">${C.money(p.cost)}</div><div class="sub">נכון לעדכון האחרון</div></div><div class="metric m4"><div class="label">רווח חזוי</div><div class="value">${C.money(p.contract - p.cost)}</div><div class="sub">${C.margin(p)}% מההצעה</div></div><div class="metric m3"><div class="label">יתרה לגבייה</div><div class="value">${C.money(C.balance(p))}</div><div class="sub">נגבה ${C.money(p.paid)}</div></div></div><div class="card"><div class="section-title"><h2>פירוט עלויות</h2><span class="badge">תפעולי · לא הנהלת חשבונות</span></div><div class="tablewrap"><table><thead><tr><th>פריט</th><th>קטגוריה</th><th>סכום</th><th>סטטוס</th><th>תאריך</th></tr></thead><tbody>${p.costs.map((c) => `<tr><td><strong>${esc(c.name)}</strong></td><td>${esc(c.category)}</td><td>${C.money(c.amount)}</td><td><span class="badge ${c.status === "אחרי חתך" ? "warn" : "ok"}">${esc(c.status)}</span></td><td>${esc(c.date)}</td></tr>`).join("")}</tbody><tfoot><tr><td colspan="2">סה״כ מערכת</td><td>${C.money(p.cost)}</td><td colspan="2">רווח חזוי ${C.money(p.contract - p.cost)}</td></tr></tfoot></table></div></div>`;
+          const pt = C.paymentTotals(p);
+          return `<div class="metrics"><div class="metric m1"><div class="label">הצעה נטו</div><div class="value">${C.money(p.contract)}</div><div class="sub">הצעה מקורית ${C.money(p.originalContract)}</div></div><div class="metric m2"><div class="label">עלות בפועל</div><div class="value">${C.money(p.cost)}</div><div class="sub">נכון לעדכון האחרון</div></div><div class="metric m4"><div class="label">רווח חזוי</div><div class="value">${C.money(p.contract - p.cost)}</div><div class="sub">${C.margin(p)}% מההצעה</div></div><div class="metric m3"><div class="label">יתרה לגבייה</div><div class="value">${C.money(C.balance(p))}</div><div class="sub">נגבה ${C.money(p.paid)}</div></div></div><div class="card"><div class="section-title"><div><h2>גבייה לפי החוזה</h2><span class="tiny muted">אבני הדרך חולצו מהחוזה; מארק מאשר שליחה וקבלה</span></div><span class="badge ${pt.ready ? "warn" : "ok"}">${pt.ready ? `${C.money(pt.ready)} מוכן לגבייה` : "אין גבייה מיידית"}</span></div><div class="tablewrap"><table><thead><tr><th>אבן דרך</th><th>סכום</th><th>מועד / התקדמות</th><th>תזכורת</th><th>סטטוס</th><th></th></tr></thead><tbody>${p.payments.map((payment, index) => `<tr><td><strong>${esc(payment.title)}</strong></td><td>${C.money(payment.amount)}</td><td>${payment.triggerType === "progress" ? `${payment.progressTarget}% התקדמות` : esc(payment.dueDate || "לא נקבע")}</td><td>${esc(payment.reminderDate || "נדרש תיאום")}</td><td><span class="badge ${payment.status === "התקבל" ? "ok" : payment.status === "מוכן לגבייה" ? "warn" : ""}">${esc(payment.status)}</span></td><td><button class="secondary tiny" data-payment-update="${index}">עדכון</button></td></tr>`).join("")}</tbody></table></div></div><div class="card"><div class="section-title"><h2>פירוט עלויות</h2><span class="badge">תפעולי · לא הנהלת חשבונות</span></div><div class="tablewrap"><table><thead><tr><th>פריט</th><th>קטגוריה</th><th>סכום</th><th>סטטוס</th><th>תאריך</th></tr></thead><tbody>${p.costs.map((c) => `<tr><td><strong>${esc(c.name)}</strong></td><td>${esc(c.category)}</td><td>${C.money(c.amount)}</td><td><span class="badge ${c.status === "אחרי חתך" ? "warn" : "ok"}">${esc(c.status)}</span></td><td>${esc(c.date)}</td></tr>`).join("")}</tbody><tfoot><tr><td colspan="2">סה״כ מערכת</td><td>${C.money(p.cost)}</td><td colspan="2">רווח תפעולי נוכחי ${C.money(p.contract - p.cost)}</td></tr></tfoot></table></div></div>`;
+        }
+        function projectMaterials(p) {
+          const mt = C.materialTotals(p);
+          return `<div class="pagehead"><div><h1>רכש וחומרים</h1><p>הרשימה מתעדכנת אוטומטית מתוך ההקלטות והעדכונים של מארק.</p></div><button class="primary" id="materialUpdate">● הקלטת רכש</button></div><div class="metrics"><div class="metric m2"><div class="label">עלות רכש וחומרים</div><div class="value">${C.money(mt.amount)}</div><div class="sub">לפי הפריטים שתועדו</div></div><div class="metric m1"><div class="label">פריטים שנקלטו</div><div class="value">${mt.count}</div><div class="sub">כולל נתונים מהפתקים</div></div></div><div class="card"><div class="section-title"><div><h2>רשימת ציוד וחומרים</h2><span class="tiny muted">הסכום נכלל בהוצאות הפרויקט ואינו נספר פעמיים</span></div><span class="badge">סה״כ ${C.money(mt.amount)}</span></div><div class="tablewrap"><table><thead><tr><th>פריט</th><th>כמות</th><th>ספק</th><th>עלות</th><th>תאריך</th><th>מקור</th></tr></thead><tbody>${p.materials.map((item) => `<tr><td><strong>${esc(item.name)}</strong></td><td>${esc(item.quantity || "—")}</td><td>${esc(item.supplier || "—")}</td><td>${C.money(item.amount)}</td><td>${esc(item.date)}</td><td>${esc(item.source)}</td></tr>`).join("")}</tbody><tfoot><tr><td colspan="3">סה״כ רכש וחומרים</td><td>${C.money(mt.amount)}</td><td colspan="2"></td></tr></tfoot></table></div></div>`;
         }
         function projectExecution(p) {
           return `<div class="grid2"><div class="card"><div class="section-title"><div><h2>משימות, חוסרים והזמנות</h2><span class="tiny muted">אפשר להקליט תשובה, להוסיף מחיר ולעדכן סטטוס</span></div><span class="badge">${p.tasks.filter((t) => !t.done).length} פתוחים</span></div>${p.tasks.map((t, i) => taskRow(t, i)).join("")}</div><div class="card"><div class="section-title"><h2>תוספות ושינויים</h2></div>${
@@ -2117,9 +2434,11 @@
                 ? projectWorklog(p)
                 : state.activeProjectTab === "costs"
                   ? projectCosts(p)
-                  : state.activeProjectTab === "execution"
-                    ? projectExecution(p)
-                    : projectFiles(p);
+                  : state.activeProjectTab === "materials"
+                    ? projectMaterials(p)
+                    : state.activeProjectTab === "execution"
+                      ? projectExecution(p)
+                      : projectFiles(p);
           return projectHeader(p) + body;
         }
         function render() {
@@ -2342,6 +2661,48 @@
           $("#saveTaskUpdate").onclick = () => save(false);
           $("#saveTaskDone").onclick = () => save(true);
         }
+        function paymentUpdateModal(paymentIndex) {
+          const p = C.getProject(state);
+          const payment = p.payments[Number(paymentIndex)];
+          if (!payment) return;
+          modal(
+            `<div class="modalhead"><div><h2>עדכון אבן דרך לתשלום</h2><p class="muted">${esc(p.name)} · ${esc(payment.title)}</p></div><button class="close">×</button></div><div class="recordbox"><button class="record" id="paymentRecord">●</button><p><strong>אפשר להקליט מה נסגר</strong></p><span class="tiny muted">לדוגמה: שלחתי ללקוח דרישת תשלום, להזכיר לי בעוד שלושה ימים</span></div><div class="field"><label>סכום</label><input id="paymentAmount" type="number" min="0" value="${payment.amount}"></div><div class="field"><label>התשלום נקבע לפי</label><select id="paymentTrigger"><option value="progress" ${payment.triggerType === "progress" ? "selected" : ""}>התקדמות העבודה</option><option value="date" ${payment.triggerType === "date" ? "selected" : ""}>תאריך</option></select></div><div class="field"><label>אחוז התקדמות</label><input id="paymentProgress" type="number" min="0" max="100" value="${payment.progressTarget || ""}" placeholder="למשל 75"></div><div class="field"><label>תאריך יעד</label><input id="paymentDueDate" value="${esc(payment.dueDate || "")}" placeholder="למשל 30/10"></div><div class="field"><label>מתי להזכיר למארק</label><input id="paymentReminder" value="${esc(payment.reminderDate || "")}" placeholder="תאריך או תנאי"></div><div class="field"><label>סטטוס</label><select id="paymentStatus">${["עתידי", "מוכן לגבייה", "דרישת תשלום נשלחה", "התקבל"].map((status) => `<option ${payment.status === status ? "selected" : ""}>${status}</option>`).join("")}</select></div><div class="field"><label>הערה</label><textarea id="paymentNote" placeholder="מה סוכם מול הלקוח">${esc(payment.note || "")}</textarea></div><div class="modal-actions"><button class="primary" id="savePayment">שמירה ועדכון</button><button class="secondary" id="markPaymentReceived">סימון שהתשלום התקבל</button></div>`,
+          );
+          $("#paymentRecord").onclick = () => {
+            $("#paymentRecord").classList.add("recording");
+            $("#paymentRecord").textContent = "■";
+            setTimeout(() => {
+              $("#paymentRecord").classList.remove("recording");
+              $("#paymentRecord").textContent = "✓";
+              $("#paymentNote").value =
+                "דרישת התשלום נשלחה ללקוח. להזכיר לי לבדוק בעוד שלושה ימים.";
+              $("#paymentReminder").value = "בעוד 3 ימים";
+              $("#paymentStatus").value = "דרישת תשלום נשלחה";
+            }, 800);
+          };
+          const save = (received) => {
+            const result = C.updatePayment(state, p.id, paymentIndex, {
+              amount: $("#paymentAmount").value,
+              triggerType: $("#paymentTrigger").value,
+              progressTarget: $("#paymentProgress").value,
+              dueDate: $("#paymentDueDate").value,
+              reminderDate: $("#paymentReminder").value,
+              status: received ? "התקבל" : $("#paymentStatus").value,
+              note: $("#paymentNote").value,
+            });
+            if (!result.ok) return toast("לא ניתן היה לשמור את התשלום");
+            closeModal();
+            state.activeProjectTab = "costs";
+            render();
+            toast(
+              received
+                ? "התשלום סומן כהתקבל והיתרה עודכנה"
+                : "אבן הדרך והתזכורת עודכנו",
+            );
+          };
+          $("#savePayment").onclick = () => save(false);
+          $("#markPaymentReceived").onclick = () => save(true);
+        }
         function workersModal() {
           modal(
             `<div class="modalhead"><div><h2>עובדים ויומיות</h2><p class="muted">תעריף יומי נשמר פעם אחת; דיווח קולי מחשב את העלות ומעדכן את הפרויקט.</p></div><button class="close">×</button></div><div class="tablewrap"><table><thead><tr><th>עובד</th><th>תעריף יומי</th><th>יומיות</th><th>עלות מחושבת</th></tr></thead><tbody>${state.workers.map((worker) => `<tr><td><strong>${esc(worker.name)}</strong></td><td><input class="worker-rate" data-worker-rate="${worker.id}" type="number" min="0" value="${worker.dailyRate || ""}" placeholder="חסר"></td><td>${worker.days}</td><td>${worker.dailyRate ? C.money(worker.dailyRate * worker.days) : '<span class="badge warn">נדרש תעריף</span>'}</td></tr>`).join("")}</tbody></table></div><p class="tiny muted">הנתונים והתעריפים בדמו הם מוק־דאטה. המעקב מיועד לעלות תפעולית בפרויקט ואינו מחליף שכר או הנהלת חשבונות.</p><div class="modal-actions"><button class="primary" id="saveWorkerRates">שמירת תעריפים</button></div>`,
@@ -2427,13 +2788,15 @@
         }
         function newProjectModal() {
           modal(
-            `<div class="modalhead"><div><h2>פתיחת פרויקט</h2><p class="muted">העלאת חוזה יכולה למלא את רוב הפרטים אוטומטית.</p></div><button class="close">×</button></div><div class="dropzone"><div style="font-size:30px">▤</div><strong>העלאת חוזה או הצעת מחיר</strong><p class="tiny muted">בדמו יוצגו נתונים שחולצו אוטומטית</p><button class="secondary" id="extractContract">הדגמת חילוץ</button></div><div class="field"><label>שם פרויקט</label><input id="npName" placeholder="שם הלקוח / הפרויקט"></div><div class="field"><label>כתובת</label><input id="npLoc" placeholder="יישוב"></div><div class="field"><label>סכום הצעה</label><input id="npContract" type="number" placeholder="₪"></div><div class="modal-actions"><button class="primary" id="saveProject">יצירת פרויקט</button></div>`,
+            `<div class="modalhead"><div><h2>פתיחת פרויקט</h2><p class="muted">העלאת חוזה ממלאת את פרטי הפרויקט ואת אבני הדרך לגבייה.</p></div><button class="close">×</button></div><div class="dropzone"><div style="font-size:30px">▤</div><strong>העלאת חוזה חתום</strong><p class="tiny muted">בדמו יוצגו נתונים שחולצו אוטומטית</p><button class="secondary" id="extractContract">הדגמת חילוץ</button></div><div class="field"><label>שם פרויקט</label><input id="npName" placeholder="שם הלקוח / הפרויקט"></div><div class="field"><label>כתובת</label><input id="npLoc" placeholder="יישוב"></div><div class="field"><label>סכום חוזה מאושר</label><input id="npContract" type="number" placeholder="₪"></div><div class="field"><label>אבני דרך לתשלום שחולצו מהחוזה</label><textarea id="npPayments" placeholder="מקדמה, תשלום לפי התקדמות, יתרה במסירה"></textarea></div><div class="modal-actions"><button class="primary" id="saveProject">יצירת פרויקט</button></div>`,
           );
           $("#extractContract").onclick = () => {
             $("#npName").value = "גינת משפחת ברק";
             $("#npLoc").value = "מיתר";
             $("#npContract").value = "124000";
-            toast("הפרטים חולצו מהמסמך — נדרש רק אישור");
+            $("#npPayments").value =
+              "40,000 ₪ בחתימה\n50,000 ₪ בהגעה ל־60% ביצוע\n34,000 ₪ במסירה";
+            toast("סכום החוזה ואבני הדרך חולצו — נדרש רק אישור");
           };
           $("#saveProject").onclick = () => {
             toast("בדמו נשמרה טיוטת פרויקט חדשה");
@@ -2492,6 +2855,13 @@
           });
           const ae = $("#addExtra");
           if (ae) ae.onclick = () => updateModal(state.currentProjectId);
+          const mu = $("#materialUpdate");
+          if (mu) mu.onclick = () => updateModal(state.currentProjectId);
+          $$("[data-payment-update]").forEach(
+            (button) =>
+              (button.onclick = () =>
+                paymentUpdateModal(button.dataset.paymentUpdate)),
+          );
           $$("[data-task-update]").forEach(
             (b) => (b.onclick = () => taskUpdateModal(b.dataset.taskUpdate)),
           );
@@ -2554,6 +2924,7 @@
           openProject,
           updateModal,
           taskUpdateModal,
+          paymentUpdateModal,
           workersModal,
           telegramModal,
           sendQuestion,
